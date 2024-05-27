@@ -13,10 +13,10 @@ type PostRepository struct {
 }
 
 type Post struct {
-	Id int `json:"id"`
-	UserId int `json:user_id`
-	Title string `json:title`
-	Body string `json:body`
+	Id        int       `json:"id"`
+	UserId    int       `json:user_id`
+	Title     string    `json:title`
+	Body      string    `json:body`
 	CreatedAt time.Time `json:created_at`
 	UpdatedAt time.Time `json:update_at`
 	DeletedAt time.Time `json:deleted_at`
@@ -54,17 +54,12 @@ func convertSlices[T, U any](srcList []T, convertFunc func(*T) U) []U {
 
 func convertPostRepositoryModelToEntity(v *Post) *entities.Post {
 	return &entities.Post{
-		Id: v.Id,
-		UserId: v.UserId,
-		Title: v.Title,
-		Body: v.Body,
+		Id:        v.Id,
+		UserId:    v.UserId,
+		Title:     v.Title,
+		Body:      v.Body,
 		CreatedAt: v.CreatedAt,
 		UpdatedAt: v.UpdatedAt,
 		DeletedAt: v.DeletedAt,
 	}
 }
-
-// func (r *PostRepository) Get(id int)(*entities.Post, error){
-// 	var obj Post
-	
-// }

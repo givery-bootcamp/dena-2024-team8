@@ -39,8 +39,8 @@ func (r *PostRepository) List() ([]*entities.Post, error) {
 		}
 		return nil, result.Error
 	}
-	pe := convertSlices(obj, convertPostRepositoryModelToEntity)
-	return pe, nil
+	pes := convertSlices(obj, convertPostRepositoryModelToEntity)
+	return pes, nil
 }
 
 // convertSlices は []T を []U へ変換します

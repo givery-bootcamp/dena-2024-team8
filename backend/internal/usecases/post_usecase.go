@@ -19,3 +19,7 @@ func (u *PostUsecase) GetList() (
 	[]*entities.Post, error) {
 	return u.repository.List()
 }
+
+func (u *PostUsecase) Get(id int) (*entities.Post, error) {
+	return u.repository.Get(id)
+}

@@ -3,9 +3,10 @@ package repositories
 import (
 	"errors"
 	"fmt"
-	"gorm.io/gorm"
 	"myapp/internal/entities"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type PostRepository struct {
@@ -26,6 +27,21 @@ func NewPostRepository(conn *gorm.DB) *PostRepository {
 	return &PostRepository{
 		Conn: conn,
 	}
+}
+
+func (r *PostRepository) Get(id int) (*entities.Post, error) {
+	var obj Post
+	result := r.Conn.Where("id = ?", id).First(&obj)
+	fmt.Printf("%+v\n", result)
+	fmt.Printf("%+v\n", obj)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, result.Error
+	}
+	pe := convertPostRepositoryModelToEntity(&obj)
+	return pe, nil
 }
 
 func (r *PostRepository) List() ([]*entities.Post, error) {

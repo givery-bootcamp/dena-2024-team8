@@ -1,0 +1,7 @@
+/docker/mysql
+node_modules/
+tmp/
+backend/myapp
+.DS_Store
+.vscode/
+.metals

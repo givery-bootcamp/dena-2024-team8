@@ -27,35 +27,6 @@ jobs:
   # ジョブ名
   backend_test:
     runs-on: ubuntu-latest
-
-    services:
-      db:
-        image: mysql:5.7
-        env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-          MYSQL_DATABASE: "training"
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=10s
-          --health-retries=10
-
-        # build: 
-        #   context: ../docker
-        #   dockerfile: mysql.Dockerfile
-        # env:
-        #   MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-        #   MYSQL_DATABASE: "training"
-        # ports:
-        #   - 3306:3306
-        # options: >-
-        #   --health-cmd="mysqladmin ping"
-        #   --health-interval=10s
-        #   --health-timeout=10s
-        #   --health-retries=10
-
     steps:
       # リポジトリからソースコードの取得
       - name: Checkout Repository
@@ -66,12 +37,16 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: 1.22
+
+      # Docker のセットアップ
+      - name: build container
+        run: docker compose -f ../docker-compose.yml up -d --wait
         
       # MySQL のセットアップ
       - name: Setup MySQL
         run: |
-          docker-compose exec -T db sh -c "mysql --protocol=tcp < ../mysql/sql/create.sql"
-          docker-compose exec -T db sh -c "mysql --protocol=tcp training < ../mysql/sql/insert.sql"
+          docker-compose exec db sh -c "mysql < /sqlscripts/create.sql"
+          docker-compose exec db sh -c "mysql training < /sqlscripts/insert.sql"
 
       # テストの実行
       - name: Run Test

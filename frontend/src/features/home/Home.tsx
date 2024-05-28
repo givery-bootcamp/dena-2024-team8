@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../shared/hooks';
 import { APIService } from '../../shared/services';
 
-export function HelloWorld() {
+export function Home() {
   const { hello } = useAppSelector((state) => state.hello);
   const dispatch = useAppDispatch();
 
@@ -11,5 +11,5 @@ export function HelloWorld() {
     dispatch(APIService.getHello());
   }, [dispatch]);
 
-  return <div><p>Now Hello World Page</p>{hello?.message}</div>;
+  return <div><p>Now Home Page</p>{hello?.message}</div>;
 }

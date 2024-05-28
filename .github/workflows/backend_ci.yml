@@ -37,6 +37,9 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: 1.22
+      
+      - name: Get Go dependencies
+        run: go get -v -t -d ./...
 
       # Docker のセットアップ
       - name: Build DB container

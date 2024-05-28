@@ -45,11 +45,6 @@ jobs:
           mysql-version: '5.7'
           root-password: root
           port: 3306
-          env:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: training
-            MYSQL_USER: test
-            MYSQL_PASSWORD: test
 
       # テスト用のデータベースを作成
       - name: Create Test Database

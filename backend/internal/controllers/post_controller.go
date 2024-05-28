@@ -2,15 +2,14 @@ package controllers
 
 import (
 	"errors"
+	"github.com/gin-gonic/gin"
 	"myapp/internal/repositories"
 	"myapp/internal/usecases"
 	"strconv"
 	"time"
-
-	"github.com/gin-gonic/gin"
 )
 
-//swaggo用の型定義
+// swaggo用の型定義
 type Post struct {
 	Id        int       `json:"id"`
 	UserId    int       `json:user_id`
@@ -28,7 +27,10 @@ type Post struct {
 // @Tags post
 // @Accept  json
 // @Produce  json
+// @Param limit query string false "件数 未実装です。"
+// @Param offset query string false "開始位置 未実装です。"
 // @Success 200 {array} Post
+// @Failure 500 {object} ErrorResponse "Internal Server Error"
 // @Router /posts [get]
 func PostList(ctx *gin.Context) {
 	repository := repositories.NewPostRepository(DB(ctx))
@@ -48,8 +50,11 @@ func PostList(ctx *gin.Context) {
 // @Tags post
 // @Accept  json
 // @Produce  json
-// @Param postId path int true "Post ID"
+// @Param postId path int true "Post ID デフォルトで1から2までしかデータがありません。"
 // @Success 200 {object} Post[]
+// @Failure 400 {object} ErrorResponse "不正なpostID"
+// @Failure 404 {object} ErrorResponse "ポストが見つからない"
+// @Failure 500 {object} ErrorResponse "Internal Server Error"
 // @Router /posts/{postId} [get]
 func PostDetail(ctx *gin.Context) {
 	sid := ctx.Param("postId")

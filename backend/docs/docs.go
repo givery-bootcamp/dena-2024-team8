@@ -29,6 +29,20 @@ const docTemplate = `{
                 ],
                 "summary": "get post list",
                 "operationId": "get-post-list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "件数 未実装です。",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "開始位置 未実装です。",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -37,6 +51,12 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/controllers.Post"
                             }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
                         }
                     }
                 }
@@ -59,7 +79,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Post ID",
+                        "description": "Post ID デフォルトで1から2までしかデータがありません。",
                         "name": "postId",
                         "in": "path",
                         "required": true
@@ -71,12 +91,41 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/controllers.Post"
                         }
+                    },
+                    "400": {
+                        "description": "不正なpostID",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "ポストが見つからない",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.ErrorResponse"
+                        }
                     }
                 }
             }
         }
     },
     "definitions": {
+        "controllers.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
         "controllers.Post": {
             "type": "object",
             "properties": {

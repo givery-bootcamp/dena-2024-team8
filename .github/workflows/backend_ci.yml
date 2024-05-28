@@ -29,20 +29,19 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      mysql:
-        build: 
-          context: ../docker
-          dockerfile: mysql.Dockerfile
-        env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-          MYSQL_DATABASE: "training"
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=10s
-          --health-retries=10
+      build: 
+        context: ../docker
+        dockerfile: mysql.Dockerfile
+      env:
+        MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+        MYSQL_DATABASE: "training"
+      ports:
+        - 3306:3306
+      options: >-
+        --health-cmd="mysqladmin ping"
+        --health-interval=10s
+        --health-timeout=10s
+        --health-retries=10
 
     steps:
       # リポジトリからソースコードの取得

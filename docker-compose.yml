@@ -37,3 +37,9 @@ services:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=training
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root"]
+      interval: 5s
+      timeout: 5s
+      retries: 6
+      start_period: 10s

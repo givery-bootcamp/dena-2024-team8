@@ -129,3 +129,17 @@ frontend/
       store/
         Redux Store関連
 ```
+
+## Swaggerの使い方
+
+ざっくり説明は[こちら](https://github.com/givery-bootcamp/dena-2024-team8/issues/10)
+
+### フロントエンド
+- [http://localhost:9000/swagger/index.html](http://localhost:9000/swagger/index.html)にアクセスしてください。
+- mock serverを立てるには[prism](https://docs.stoplight.io/docs/prism/674b27b261c3c-prism-overview)っていうライブラリを使えばできるらしい（未検証）
+
+### バックエンド
+- 'controllers/*'の関数に対して記述します。
+- 記法は[ここ](https://github.com/swaggo/swag?tab=readme-ov-file#how-to-use-it-with-gin)とか、chatgptに聞いてください。
+- 更新したら'swag init'とコマンドを打ち、更新してください。
+- コマンドを打つと、自動的にswagger uiは更新されます。

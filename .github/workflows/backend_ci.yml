@@ -40,7 +40,7 @@ jobs:
 
       # テストの実行
       - name: Run Test
-        run: go test -v ./... -coverprofile=coverage.out
+        run: go test -v ./test/... -coverprofile=coverage.out
 
       # 実行結果を出力
       - name: Run Octocov

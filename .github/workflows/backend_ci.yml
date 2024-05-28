@@ -5,7 +5,7 @@ name: backend_ci
 on:
   pull_request:
     branches:
-      - develop
+      - main
     # ルート直下の場合は不要
     paths:
       - "backend/**"

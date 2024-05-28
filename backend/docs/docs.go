@@ -118,9 +118,6 @@ const docTemplate = `{
         "controllers.ErrorResponse": {
             "type": "object",
             "properties": {
-                "code": {
-                    "type": "integer"
-                },
                 "message": {
                     "type": "string"
                 }

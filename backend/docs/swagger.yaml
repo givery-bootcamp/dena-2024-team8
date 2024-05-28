@@ -1,8 +1,6 @@
 definitions:
   controllers.ErrorResponse:
     properties:
-      code:
-        type: integer
       message:
         type: string
     type: object

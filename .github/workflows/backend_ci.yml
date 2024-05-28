@@ -55,9 +55,6 @@ jobs:
       - name: Run Test
         run: go test -v ./test/... -coverprofile=coverage.out
 
-      # 実行結果を出力
-      - name: Run Octocov
-        uses: k1LoW/octocov-action@v0
 
   backend_lint:
     runs-on: ubuntu-latest

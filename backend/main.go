@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"myapp/internal/config"
 	"myapp/internal/external"
 	"myapp/internal/middleware"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {

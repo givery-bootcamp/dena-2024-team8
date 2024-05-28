@@ -28,7 +28,7 @@ jobs:
   backend_test:
     runs-on: ubuntu-latest
 
-    services:
+    db:
       build: 
         context: ../docker
         dockerfile: mysql.Dockerfile

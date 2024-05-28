@@ -40,7 +40,7 @@ jobs:
       
       # MySQL のコンテナを起動
       - name: Start MySQL
-        run: docker-compose -f ../docker-compose.yml up -d dena-2024-team8-db-1
+        run: docker-compose -f ../docker-compose.yml up -d db-1
 
       # テストの実行
       - name: Run Test

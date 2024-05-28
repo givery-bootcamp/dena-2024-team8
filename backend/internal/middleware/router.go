@@ -1,8 +1,9 @@
 package middleware
 
 import (
-	"github.com/gin-gonic/gin"
 	"myapp/internal/controllers"
+
+	"github.com/gin-gonic/gin"
 )
 
 func SetupRoutes(app *gin.Engine) {
@@ -11,4 +12,5 @@ func SetupRoutes(app *gin.Engine) {
 	})
 	app.GET("/hello", controllers.HelloWorld)
 	app.GET("/posts", controllers.PostList)
+	app.GET("/posts/:postId", controllers.PostDetail)
 }

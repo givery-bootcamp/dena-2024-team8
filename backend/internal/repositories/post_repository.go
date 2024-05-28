@@ -3,9 +3,10 @@ package repositories
 import (
 	"errors"
 	"fmt"
-	"gorm.io/gorm"
 	"myapp/internal/entities"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type PostRepository struct {
@@ -28,9 +29,25 @@ func NewPostRepository(conn *gorm.DB) *PostRepository {
 	}
 }
 
-func (r *PostRepository) List() ([]*entities.Post, error) {
+func (r *PostRepository) Get(id int) (*entities.Post, error) {
+	posts, err := r.List(&id)
+	if err != nil {
+		return nil, err
+	}
+	if len(posts) == 0 {
+		return nil, errors.New("not found")
+	}
+	return posts[0], nil
+}
+
+func (r *PostRepository) List(id *int) ([]*entities.Post, error) {
 	var obj []Post
-	result := r.Conn.Order("id desc").Find(&obj)
+	var result *gorm.DB
+	if id != nil {
+		result = r.Conn.Where("id = ?", id).Order("id desc").Find(&obj)
+	} else {
+		result = r.Conn.Order("id desc").Find(&obj)
+	}
 	fmt.Printf("%+v\n", result)
 	fmt.Printf("%+v\n", obj)
 	if result.Error != nil {
@@ -39,8 +56,8 @@ func (r *PostRepository) List() ([]*entities.Post, error) {
 		}
 		return nil, result.Error
 	}
-	pe := convertSlices(obj, convertPostRepositoryModelToEntity)
-	return pe, nil
+	pes := convertSlices(obj, convertPostRepositoryModelToEntity)
+	return pes, nil
 }
 
 // convertSlices は []T を []U へ変換します

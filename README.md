@@ -136,6 +136,7 @@ frontend/
 
 ### フロントエンド
 - [http://localhost:9000/swagger/index.html](http://localhost:9000/swagger/index.html)にアクセスしてください。
+- パラメータは画面の中の`try it out`を押してから入力してください。
 - mock serverを立てるには[prism](https://docs.stoplight.io/docs/prism/674b27b261c3c-prism-overview)っていうライブラリを使えばできるらしい（未検証）
 
 ### バックエンド

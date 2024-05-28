@@ -4,9 +4,9 @@ import (
 	"myapp/internal/controllers"
 
 	"github.com/gin-gonic/gin"
-	"github.com/swaggo/gin-swagger"
-    "github.com/swaggo/gin-swagger/swaggerFiles"
-    _ "path/to/your/project/docs"
+	"github.com/swaggo/gin-swagger" // gin-swagger middleware
+	"github.com/swaggo/files" // swagger embed files
+    _ "myapp/docs"
 )
 
 // @title Example API

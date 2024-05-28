@@ -132,7 +132,7 @@ frontend/
 
 ## Swaggerの使い方
 
-ざっくり説明は[こちら](https://github.com/givery-bootcamp/dena-2024-team8/issues/10)
+ざっくりSwaggerの概要は[こちら](https://github.com/givery-bootcamp/dena-2024-team8/issues/10)
 
 ### フロントエンド
 - [http://localhost:9000/swagger/index.html](http://localhost:9000/swagger/index.html)にアクセスしてください。

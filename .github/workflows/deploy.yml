@@ -16,6 +16,8 @@ env:
   ECS_SERVICE: dena-training-2024-team-8
   BUCKET_PREFIX: team-8
   VITE_API_ENDPOINT_PATH: https://team-8_bk.member0005.track-bootcamp.run
+  DB_USER: ${{ secrets.DB_USER }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
 jobs:
   # backendをbuildしてartifactに保存する

@@ -3,7 +3,7 @@ name: Deploy
 on:
   pull_request:
     branches:
-      - 'main'
+      - '24-deploy'
 
 # 環境変数を設定
 env:

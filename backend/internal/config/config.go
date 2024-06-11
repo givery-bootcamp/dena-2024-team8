@@ -16,6 +16,7 @@ var DBName = "training"
 func IsLocal() bool {
 	return os.Getenv("ENV") == "local"
 }
+//コミットするためだけのコメント
 
 // ローカルの場合と本番の場合でDBのユーザー名とパスワードを変更する
 var isLocal = IsLocal()

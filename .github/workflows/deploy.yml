@@ -1,7 +1,9 @@
 name: Deploy
 
 on:
-  pull_request:
+  push:
+    branches:
+      - main
 
 # 環境変数を設定
 env:

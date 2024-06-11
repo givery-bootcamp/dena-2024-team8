@@ -15,9 +15,9 @@ func NewPostUsecase(r interfaces.PostRepository) *PostUsecase {
 	}
 }
 
-func (u *PostUsecase) GetList() (
+func (u *PostUsecase) GetList(limit int, offset int) (
 	[]*entities.Post, error) {
-	return u.repository.List(nil)
+	return u.repository.List(nil, limit, offset)
 }
 
 func (u *PostUsecase) Get(id int) (*entities.Post, error) {

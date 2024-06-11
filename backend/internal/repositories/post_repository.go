@@ -30,7 +30,7 @@ func NewPostRepository(conn *gorm.DB) *PostRepository {
 }
 
 func (r *PostRepository) Get(id int) (*entities.Post, error) {
-	posts, err := r.List(&id)
+	posts, err := r.List(&id, 1, 0)
 	if err != nil {
 		return nil, err
 	}
@@ -40,19 +40,19 @@ func (r *PostRepository) Get(id int) (*entities.Post, error) {
 	return posts[0], nil
 }
 
-func (r *PostRepository) List(id *int) ([]*entities.Post, error) {
+func (r *PostRepository) List(id *int, limit int, offset int) ([]*entities.Post, error) {
 	var obj []Post
 	var result *gorm.DB
 	if id != nil {
 		result = r.Conn.Where("id = ?", id).Order("id desc").Find(&obj)
 	} else {
-		result = r.Conn.Order("id desc").Find(&obj)
+		result = r.Conn.Order("id desc").Limit(limit).Offset(offset).Find(&obj)
 	}
 	fmt.Printf("%+v\n", result)
 	fmt.Printf("%+v\n", obj)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return nil, nil
+			return []*entities.Post{}, nil
 		}
 		return nil, result.Error
 	}

@@ -23,7 +23,7 @@ export function Home() {
         <PostForm />
         <hr />
         <div><p>Now Home Page</p>{hello?.message}</div>
-        <PostCardList itemList={[1,2,3,4]} /> 
+        <PostCardList itemList={[1,2,3,4,5]} /> 
         {/* TODO itemListの中身の設定 */}
       </div>
       <div className="col-2 border" style={{ height: '100vh' }}>

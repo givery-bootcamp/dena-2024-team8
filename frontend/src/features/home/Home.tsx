@@ -4,9 +4,10 @@ import { useAppDispatch, useAppSelector } from '../../shared/hooks';
 import { APIService } from '../../shared/services';
 import Sidebar from '../../components/Sidebar';
 import PostForm from '../../components/form/PostForm';
-import PostCardList from '../../components/card/PostCardList';
+import PostList from '../../features/posts/Posts';
+
 export function Home() {
-  const { hello } = useAppSelector((state) => state.hello);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -22,9 +23,7 @@ export function Home() {
       <div className="col-8 border" style={{ backgroundColor: 'white', height: '100vh', padding: '1%' }}>
         <PostForm />
         <hr />
-        <div><p>Now Home Page</p>{hello?.message}</div>
-        <PostCardList itemList={[1,2,3,4,5]} /> 
-        {/* TODO itemListの中身の設定 */}
+        <PostList />
       </div>
       <div className="col-2 border" style={{ height: '100vh' }}>
       </div>

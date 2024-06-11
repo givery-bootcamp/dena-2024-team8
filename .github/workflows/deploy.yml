@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - main
+      - 'main'
 
 # 環境変数を設定
 env:

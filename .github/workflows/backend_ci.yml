@@ -67,7 +67,7 @@ jobs:
       - name: Run Test
         run: go test -v ./test/...
         env:
-          ENV: local
+          ENV: test
 
 
   backend_lint:

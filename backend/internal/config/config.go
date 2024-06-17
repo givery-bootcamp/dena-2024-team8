@@ -11,21 +11,8 @@ var CorsAllowOrigin = "http://localhost:3000"
 var DBHostName = "db"
 var DBPort = 3306
 var DBName = "training"
-
-// ローカル環境か判定する関数
-func IsLocal() bool {
-	return os.Getenv("ENV") == "local"
-}
-
-func IsTest() bool {
-	return os.Getenv("ENV") == "test"
-}
-
-// ローカルの場合と本番の場合でDBのユーザー名とパスワードを変更する
-var isLocal = IsLocal()
-var isTest = IsTest()
-var DBUser = "admin"
-var DBPassword = "dena-training-2024-team-8"
+var DBUser = "root"
+var DBPassword = ""
 
 func init() {
 	if v := os.Getenv("HOSTNAME"); v != "" {
@@ -46,14 +33,10 @@ func init() {
 	if v := os.Getenv("DB_NAME"); v != "" {
 		DBName = v
 	}
-	if isLocal {
-		DBHostName = "db"
-		DBUser = "root"
-		DBPassword = ""
+	if v := os.Getenv("DB_USER"); v != "" {
+		DBUser = v
 	}
-	if isTest {
-		DBHostName = "localhost"
-		DBUser = "root"
-		DBPassword = ""
+	if v := os.Getenv("DB_PASSWORD"); v != "" {
+		DBPassword = v
 	}
 }

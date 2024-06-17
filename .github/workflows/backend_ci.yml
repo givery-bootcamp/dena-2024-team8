@@ -67,7 +67,7 @@ jobs:
       - name: Run Test
         run: go test -v ./test/...
         env:
-          ENV: test
+          DB_HOSTNAME: localhost 
 
 
   backend_lint:

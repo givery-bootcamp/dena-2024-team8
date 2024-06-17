@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useAppDispatch, useAppSelector } from '../../shared/hooks';
+import { useAppDispatch } from '../../shared/hooks';
 import { APIService } from '../../shared/services';
 import Sidebar from '../../components/Sidebar';
 import PostForm from '../../components/form/PostForm';
@@ -17,15 +17,15 @@ export function Home() {
   return (
     <div className="container-xxl">
     <div className="row">
-      <div className="col-2 border text-center" style={{ height: '100vh' }}>
+      <div className="col-2 border text-center">
         <Sidebar />
       </div>
-      <div className="col-8 border" style={{ backgroundColor: 'white', height: '100vh', padding: '1%' }}>
+      <div className="col-8 border bg-white vh-100 p-3">
         <PostForm />
         <hr />
         <PostList />
       </div>
-      <div className="col-2 border" style={{ height: '100vh' }}>
+      <div className="col-2 border" >
       </div>
     </div>
     </div>

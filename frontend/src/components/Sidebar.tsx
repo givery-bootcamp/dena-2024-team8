@@ -1,16 +1,12 @@
-export default function Sidebar() {
-    return (
-        <nav className="nav flex-column">
-          <ul>
-            <li>
-              <a className="nav-link btn flat" href="/">
-                Home
-              </a>
-            </li>
-            <li>
-              <a className="nav-link" href="/search">Search</a>
-            </li>
-          </ul>
-        </nav>
-    );
-}
+export const Sidebar = () => {
+  return (
+    <div>
+      <nav>
+        <ul>
+          <li className="mb-2"><a href="#" className="text-blue-500">Home</a></li>
+          <li><a href="#" className="text-blue-500">Search</a></li>
+        </ul>
+      </nav>
+    </div>
+  );
+};

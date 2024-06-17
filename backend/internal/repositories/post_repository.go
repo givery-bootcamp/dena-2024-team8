@@ -16,6 +16,7 @@ type PostRepository struct {
 type Post struct {
 	Id        int       `json:"id"`
 	UserId    int       `json:user_id`
+	User      User      `gorm:"foreignKey:UserId" json:user`
 	Title     string    `json:title`
 	Body      string    `json:body`
 	CreatedAt time.Time `json:created_at`
@@ -44,9 +45,9 @@ func (r *PostRepository) List(id *int, limit int, offset int) ([]*entities.Post,
 	var obj []Post
 	var result *gorm.DB
 	if id != nil {
-		result = r.Conn.Where("id = ?", id).Order("id desc").Find(&obj)
+		result = r.Conn.Preload("User").Where("id = ?", id).Order("id desc").Find(&obj)
 	} else {
-		result = r.Conn.Order("id desc").Limit(limit).Offset(offset).Find(&obj)
+		result = r.Conn.Preload("User").Order("id desc").Limit(limit).Offset(offset).Find(&obj)
 	}
 	fmt.Printf("%+v\n", result)
 	fmt.Printf("%+v\n", obj)
@@ -56,7 +57,10 @@ func (r *PostRepository) List(id *int, limit int, offset int) ([]*entities.Post,
 		}
 		return nil, result.Error
 	}
-	pes := convertSlices(obj, convertPostRepositoryModelToEntity)
+	pes := convertSlices(obj, func(v *Post) *entities.Post {
+		return convertPostRepositoryModelToEntity(v, &v.User)
+	})
+
 	return pes, nil
 }
 
@@ -69,10 +73,11 @@ func convertSlices[T, U any](srcList []T, convertFunc func(*T) U) []U {
 	return result
 }
 
-func convertPostRepositoryModelToEntity(v *Post) *entities.Post {
+func convertPostRepositoryModelToEntity(v *Post, u *User) *entities.Post {
 	return &entities.Post{
 		Id:        v.Id,
 		UserId:    v.UserId,
+		User:      *ConvertUserRepositoryModelToEntity(u),
 		Title:     v.Title,
 		Body:      v.Body,
 		CreatedAt: v.CreatedAt,

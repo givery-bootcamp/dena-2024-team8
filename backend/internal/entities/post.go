@@ -7,6 +7,7 @@ import (
 type Post struct {
 	Id        int       `json:"id"`
 	UserId    int       `json:user_id`
+	User      User      `gorm:"foreignKey:UserId"`
 	Title     string    `json:title`
 	Body      string    `json:body`
 	CreatedAt time.Time `json:created_at`

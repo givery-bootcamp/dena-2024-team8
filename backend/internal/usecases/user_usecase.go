@@ -20,6 +20,7 @@ func NewUserUsecase(r interfaces.UserRepository) *UserUsecase {
 
 func generateJWT(userId int) (string, error) {
 	key := "jwt"
+	// key := os.Getenv("JWT_SECRET") // 環境変数から取得する場合
 	if key == "" {
 		return "", errors.New("JWT_SECRET is not set")
 	}

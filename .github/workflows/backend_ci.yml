@@ -65,7 +65,9 @@ jobs:
 
       # テストの実行
       - name: Run Test
-        run: go test -v ./test/... -coverprofile=coverage.out
+        run: go test -v ./test/...
+        env:
+          ENV: local
 
 
   backend_lint:

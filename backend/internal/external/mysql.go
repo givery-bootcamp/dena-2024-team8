@@ -2,10 +2,11 @@ package external
 
 import (
 	"fmt"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 	"myapp/internal/config"
 	"os"
+
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
@@ -24,5 +25,5 @@ func SetupDB() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	DB = db
+	DB = db.Debug()
 }

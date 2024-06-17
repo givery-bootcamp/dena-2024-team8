@@ -1,13 +1,13 @@
 import { Routes, Route } from "react-router-dom";
 
-import { HelloWorld } from "../features/helloworld";
 import { MainLayout } from "./MainLayout";
+import { Home } from "../features/home";
 
 export const AppRoute = () => {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-        <Route path="/" element={<HelloWorld />} />
+        <Route path="/" element={<Home />} />
       </Route>
     </Routes>
   );

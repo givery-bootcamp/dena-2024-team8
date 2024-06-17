@@ -1,15 +1,11 @@
-import { AppRoute } from './AppRoute';
-
-import './App.scss';
+import { AppRoute } from "./AppRoute";
+import "./App.scss";
 
 function App() {
   return (
-    <div className="app-root bg-red-500">
-      <header className="app-header">サンプルアプリケーション</header>
-      <main className="app-body container">
-        <AppRoute />
-      </main>
-    </div>
+    <main className="min-h-screen flex flex-col">
+      <AppRoute />
+    </main>
   );
 }
 

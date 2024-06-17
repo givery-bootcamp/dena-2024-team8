@@ -15,12 +15,12 @@
     - https://react-redux.js.org/introduction/getting-started
   - react-router-dom: 6
     - https://v5.reactrouter.com/web/guides/philosophy
-  - bootstrap: 5
-    - https://getbootstrap.com/docs/5.1/getting-started/introduction/
   - classnames: 2.3
     - https://github.com/JedWatson/classnames
   - typescript: 5
     - https://www.typescriptlang.org/docs/
+  - tailwindcss: 3
+    - https://tailwindcss.com/docs/installation
 - db:
   - mysql: 8.3
 

@@ -13,9 +13,11 @@ export default function PostCard({item}: {item: Post}) {
     return (
       <div className="card">
         <div className="card-body">
-          <p className="card-title fs-5">{item.Title}</p>
-          <div className="card-text" dangerouslySetInnerHTML={{ __html: bodyHTML }} ></div>
-          <p className="card-text">{new Date(item.CreatedAt).toLocaleString("ja-JP")}</p>
+          <h4 className="card-title">{item.Title}</h4>
+          <div>
+            <p className="card-text" dangerouslySetInnerHTML={{ __html: bodyHTML }} ></p>
+            <time className="card-text">{new Date(item.CreatedAt).toLocaleString("ja-JP")}</time>
+          </div>
         </div>
       </div>
     );

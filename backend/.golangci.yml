@@ -1,0 +1,17 @@
+    steps:
+      # リポジトリからソースコードの取得
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Reveiwdogでgolangci-lintを実行
+      - name: Run golangci-lint with Reviewdog
+        uses: reviewdog/action-golangci-lint@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          go_version: 1.21
+          # reviewdog の動作モードの指定
+          reporter: github-pr-review
+          # Github Status へのレポートレベルの指定
+          level: warning
+          workdir: backend/
+          golangci_lint_flags: "--config=.golangci.yml"

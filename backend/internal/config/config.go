@@ -8,7 +8,7 @@ import (
 var HostName = "127.0.0.1"
 var Port = 9000
 var CorsAllowOrigin = "http://localhost:3000"
-var DBHostName = "db"
+var DBHostName = "localhost"
 var DBPort = 3306
 var DBName = "training"
 

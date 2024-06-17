@@ -1,0 +1,116 @@
+# ワークフローの名前
+name: backend_ci
+
+# トリガーになる Github イベント
+on:
+  pull_request:
+    branches:
+      - main
+    # ルート直下の場合は不要
+    paths:
+      - "backend/**"
+  # 無くても良い（手動実行したい人だけ残す）
+  workflow_dispatch:
+
+# 環境変数を設定
+env:
+  DOCKER_IMAGE_TAG: "backend"
+
+# デフォルトの作業ディレクトリ変更
+# ルート直下の場合は不要
+defaults:
+  run:
+    working-directory: backend
+
+# ジョブ定義
+jobs:
+  # ジョブ名
+  backend_test:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+          MYSQL_DATABASE: "training"
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=5s --health-retries=6
+
+    steps:
+      # リポジトリからソースコードの取得
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Go の実行環境 Setup
+      - name: Go Setup
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.22
+
+      - name: Get Go dependencies
+        run: go get -v -t -d ./...
+
+      # MySQL クライアントのインストール
+      - name: Install MySQL Client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mysql-client
+
+      # MySQL のセットアップ
+      - name: Setup MySQL
+        run: |
+          mysql -h 127.0.0.1 -u root < ../mysql/sql/create.sql
+          mysql -h 127.0.0.1 -u root training < ../mysql/sql/insert.sql
+
+      # テストの実行
+      - name: Run Test
+        run: go test -v ./test/...
+        env:
+          ENV: local
+
+
+  backend_lint:
+    runs-on: ubuntu-latest
+    # GITHUB_TOKEN への権限設定
+    permissions:
+      checks: write
+      contents: read
+      pull-requests: write
+    steps:
+      # リポジトリからソースコードの取得
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Reveiwdogでgolangci-lintを実行
+      - name: Run golangci-lint with Reviewdog
+        uses: reviewdog/action-golangci-lint@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          go_version: 1.22
+          # reviewdog の動作モードの指定
+          reporter: github-pr-review
+          # Github Status へのレポートレベルの指定
+          level: warning
+          workdir: backend/
+          golangci_lint_flags: "--config=.golangci.yml"
+
+  backend_build_check:
+    runs-on: ubuntu-latest
+    steps:
+      # リポジトリからソースコードの取得
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Dockerのコンテナイメージをビルド
+      - name: Docker Build
+        run: |
+          docker build -f ../docker/backend.Dockerfile -t ${{ env.DOCKER_IMAGE_TAG }} .
+
+      # Dockleで脆弱性検査を行う
+      - name: Run Dockle
+        uses: erzz/dockle-action@v1
+        with:
+          image: ${{ env.DOCKER_IMAGE_TAG }}
+          exit-code: 1
+          failure-threshold: fatal

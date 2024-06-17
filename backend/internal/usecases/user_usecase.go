@@ -40,7 +40,7 @@ func generateJWT(userId int) (string, error) {
 	return tokenString, nil
 }
 
-func (u *UserUsecase) GenerateJWTToken(username, password string) (*entities.User, *string, error) {
+func (u *UserUsecase) VerifyUserAndGenerateJWT(username, password string) (*entities.User, *string, error) {
 	var user, err = u.repository.VerifyUser(username, password)
 	if err != nil {
 		return nil, nil, err

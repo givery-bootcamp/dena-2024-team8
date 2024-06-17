@@ -21,7 +21,7 @@ func SignIn(ctx *gin.Context) {
 
 	repository := repositories.NewUserRepository(DB(ctx))
 	usecase := usecases.NewUserUsecase(repository)
-	result, jwtToken, err := usecase.GenerateJWTToken(username, password)
+	result, jwtToken, err := usecase.VerifyUserAndGenerateJWT(username, password)
 	ctx.SetCookie("jwt", *jwtToken, 3600, "/", "", false, true)
 	if err != nil {
 		handleError(ctx, 500, err)

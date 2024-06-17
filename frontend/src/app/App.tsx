@@ -4,7 +4,7 @@ import './App.scss';
 
 function App() {
   return (
-    <div className="app-root">
+    <div className="app-root bg-red-500">
       <header className="app-header">サンプルアプリケーション</header>
       <main className="app-body container">
         <AppRoute />

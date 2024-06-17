@@ -10,9 +10,12 @@ services:
       - ./backend:/go/src/myapp
     command: "air"
     depends_on:
-      - db
+      db: 
+        condition: service_healthy
     environment:
       TZ: Asia/Tokyo
+    env_file:
+      - .env
   frontend:
     image: node:20.12.2
     working_dir: /home/node/myapp
@@ -39,7 +42,7 @@ services:
       - MYSQL_DATABASE=training
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root"]
-      interval: 5s
-      timeout: 5s
+      interval: 1s
+      timeout: 1s
       retries: 6
-      start_period: 10s
+      start_period: 2s

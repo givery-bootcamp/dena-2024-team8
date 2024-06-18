@@ -13,5 +13,5 @@ func SetupRoutes(app *gin.Engine) {
 	app.GET("/hello", controllers.HelloWorld)
 	app.GET("/posts", controllers.PostList)
 	app.GET("/posts/:postId", controllers.PostDetail)
-	app.POST("/sign_in", controllers.SignIn)
+	app.POST("/signin", controllers.SignIn)
 }

@@ -4,9 +4,9 @@ import { Sidebar } from "../components/Sidebar";
 
 export const MainLayout = () => {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Header />
-      <div className="flex-1">
+      <main className="flex-1">
         <div className="flex flex-row">
           <div className="col-2 border text-center">
             <Sidebar />
@@ -15,7 +15,7 @@ export const MainLayout = () => {
             <Outlet />
           </div>
         </div>
-      </div>
-    </>
+      </main>
+    </div>
   );
 };

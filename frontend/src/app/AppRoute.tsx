@@ -1,10 +1,14 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route } from "react-router-dom";
 
-import { Home } from '../features/home';
+import { MainLayout } from "./MainLayout";
+import { Home } from "../features/home";
+
 export const AppRoute = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<Home />} />
+      </Route>
     </Routes>
   );
 };

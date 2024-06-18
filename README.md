@@ -15,12 +15,12 @@
     - https://react-redux.js.org/introduction/getting-started
   - react-router-dom: 6
     - https://v5.reactrouter.com/web/guides/philosophy
-  - bootstrap: 5
-    - https://getbootstrap.com/docs/5.1/getting-started/introduction/
   - classnames: 2.3
     - https://github.com/JedWatson/classnames
   - typescript: 5
     - https://www.typescriptlang.org/docs/
+  - tailwindcss: 3
+    - https://tailwindcss.com/docs/installation
 - db:
   - mysql: 8.3
 
@@ -129,3 +129,22 @@ frontend/
       store/
         Redux Store関連
 ```
+
+## Swaggerの使い方
+
+ざっくりSwaggerの概要は[こちら](https://github.com/givery-bootcamp/dena-2024-team8/issues/10)
+
+### フロントエンド
+- いつもの`docker-compose up`で立ち上げる
+  - 最初だけもしかしたら`docker-compose build`が必要かも
+- [http://localhost:9000/swagger/index.html](http://localhost:9000/swagger/index.html)にアクセスしてください。
+- パラメータは画面の中の`try it out`を押してから入力してください。
+- mock serverを立てるには[prism](https://docs.stoplight.io/docs/prism/674b27b261c3c-prism-overview)っていうライブラリを使えばできるらしい（未検証）
+
+### バックエンド
+- `backend/internal/controllers/*`の関数に対して記述します。
+- 記法は[ここ](https://github.com/swaggo/swag?tab=readme-ov-file#how-to-use-it-with-gin)とか、chatgptに聞いてください。
+- swaggoの記述を更新したら
+  - `docker-compose exec backend bash`でコンテナに入って、
+  - `swag init`とコマンドを打ち、更新してください。
+- コマンドを打つと、自動的にswagger uiは更新されます。

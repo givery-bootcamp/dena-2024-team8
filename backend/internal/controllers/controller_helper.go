@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type ErrorResponse struct {
+type HelloErrorResponse struct {
 	Message string "json:`message`"
 }
 
@@ -14,7 +14,7 @@ func DB(ctx *gin.Context) *gorm.DB {
 }
 
 func handleError(ctx *gin.Context, status int, err error) {
-	res := ErrorResponse{
+	res := HelloErrorResponse{
 		Message: err.Error(),
 	}
 	ctx.JSON(status, &res)

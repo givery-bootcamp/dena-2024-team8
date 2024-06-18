@@ -15,8 +15,6 @@ export const Post = () => {
         }
     },[dispatch,postId])
 
-    console.log(postDetail?.id);
-
     return (
         <>
             {postDetail?.id}

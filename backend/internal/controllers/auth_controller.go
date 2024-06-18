@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"github.com/gin-gonic/gin"
 	"errors"
 	"myapp/internal/repositories"
 	"myapp/internal/usecases"
@@ -30,4 +31,11 @@ func SignIn(ctx *gin.Context) {
 	} else {
 		handleError(ctx, 404, errors.New("signin failed"))
 	}
+}
+
+func SignOut(ctx *gin.Context) {
+	ctx.SetCookie("jwt", "", -1, "/", "", false, true)
+	ctx.JSON(200, gin.H{
+		"message": "signout success",
+	})
 }

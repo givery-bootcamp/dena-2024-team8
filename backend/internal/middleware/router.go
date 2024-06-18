@@ -21,7 +21,8 @@ func SetupRoutes(app *gin.Engine) {
 	app.GET("/hello", controllers.HelloWorld)
 	app.GET("/posts", controllers.PostList)
 	app.GET("/posts/:postId", controllers.PostDetail)
-	app.POST("/signout", controllers.SignOut)
+	app.POST("/signin", controllers.SignIn)
+  app.POST("/signout", controllers.SignOut)
 	// Swaggerのエンドポイントを設定
 	app.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }

@@ -12,6 +12,16 @@ var DBHostName = "db"
 var DBPort = 3306
 var DBName = "training"
 
+//ローカル環境か判定する関数
+func IsLocal() bool {
+	return os.Getenv("ENV") == "local"
+}
+
+// ローカルの場合と本番の場合でDBのユーザー名とパスワードを変更する
+var isLocal = IsLocal()
+var DBUser = "admin"
+var DBPassword = "dena-training-2024-team-8"
+
 func init() {
 	if v := os.Getenv("HOSTNAME"); v != "" {
 		HostName = v
@@ -30,5 +40,9 @@ func init() {
 	}
 	if v := os.Getenv("DB_NAME"); v != "" {
 		DBName = v
+	}
+	if isLocal {
+		DBUser = "root"
+		DBPassword = ""
 	}
 }

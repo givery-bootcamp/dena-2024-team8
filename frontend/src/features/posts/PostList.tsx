@@ -14,11 +14,10 @@ export const PostList = () => {
     dispatch(APIService.getPostList());
   }, [dispatch]);
 
-  return (
-    
+  return (  
     <div className="w-3/4 p-4">
       {postList && postList.map((post: Post, index: number) => (
-          <PostCard key={index} title={post.Title} content={post.Body} date={post.CreatedAt} />
+        <PostCard key={index} title={post.Title} content={post.Body} date={post.CreatedAt} postId = {post.id}/>
       ))}
     </div>
   );

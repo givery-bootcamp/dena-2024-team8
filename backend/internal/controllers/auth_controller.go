@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"github.com/gin-gonic/gin"
 	"errors"
 	"myapp/internal/repositories"
 	"myapp/internal/usecases"

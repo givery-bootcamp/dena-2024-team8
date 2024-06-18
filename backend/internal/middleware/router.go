@@ -1,10 +1,18 @@
 package middleware
 
 import (
-	"myapp/internal/controllers"
-
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/files"       // swagger embed files
+	"github.com/swaggo/gin-swagger" // gin-swagger middleware
+	_ "myapp/docs"
+	"myapp/internal/controllers"
 )
+
+// @title Example API
+// @version 1.0
+// @description This is a sample server for demonstrating Swagger with Gin.
+// @host localhost:8080
+// @BasePath /
 
 func SetupRoutes(app *gin.Engine) {
 	app.GET("/", func(ctx *gin.Context) {
@@ -13,4 +21,6 @@ func SetupRoutes(app *gin.Engine) {
 	app.GET("/hello", controllers.HelloWorld)
 	app.GET("/posts", controllers.PostList)
 	app.GET("/posts/:postId", controllers.PostDetail)
+	// Swaggerのエンドポイントを設定
+	app.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }

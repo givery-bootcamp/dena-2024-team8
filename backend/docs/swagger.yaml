@@ -1,0 +1,92 @@
+definitions:
+  controllers.ErrorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  controllers.Post:
+    properties:
+      body:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /posts:
+    get:
+      consumes:
+      - application/json
+      description: get post list
+      operationId: get-post-list
+      parameters:
+      - description: 件数 未実装です。
+        in: query
+        name: limit
+        type: string
+      - description: 開始位置 未実装です。
+        in: query
+        name: offset
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/controllers.Post'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: get post list
+      tags:
+      - post
+  /posts/{postId}:
+    get:
+      consumes:
+      - application/json
+      description: get post by id
+      operationId: get-post-by-id
+      parameters:
+      - description: Post ID デフォルトで1から2までしかデータがありません。
+        in: path
+        name: postId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.Post'
+        "400":
+          description: 不正なpostID
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: ポストが見つからない
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: get post by id
+      tags:
+      - post
+swagger: "2.0"

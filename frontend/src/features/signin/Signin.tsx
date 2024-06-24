@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../shared/hooks';
+import { useState } from 'react';
+import { useAppDispatch } from '../../shared/hooks';
 import { APIService } from '../../shared/services';
+import { useNavigate } from 'react-router-dom';
+
 
 export function Signin() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const handleSignIn = () => {
         // ログイン処理を実行するコードをここに追加します
@@ -20,7 +23,7 @@ export function Signin() {
                 // responseからデータを取得し、ログイン成功の処理を行う
                 if (response.payload && response.payload) {
                     // homeに遷移
-                    window.location.href = "/";
+                    navigate('/');
                 } else {
                     // データが存在しない場合の処理をここに記述
                     setErrorMessage("ユーザー名またはパスワードが違います。再度お試しください。");

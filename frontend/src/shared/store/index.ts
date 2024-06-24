@@ -10,7 +10,7 @@ export const store = configureStore({
     hello: helloReducer,
     post: postReducer,
     detail : postDetailReducer,
-    sinin: signinReducer,
+    singin: signinReducer,
   },
 });
 

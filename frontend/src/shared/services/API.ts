@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { Hello } from '../models';
-import { PostList,Post } from '../models';
+import { PostList, Post, User } from '../models';
 
 const API_ENDPOINT_PATH =
   import.meta.env.VITE_API_ENDPOINT_PATH ?? '';
@@ -21,15 +21,16 @@ export const getPostDetail = createAsyncThunk<Post,string>('getPostDetail',async
   return await response.json();
 }) 
 
-export const signin = createAsyncThunk<Post, { username: string; password: string }>(
+export const signin = createAsyncThunk<User, { username: string, password: string }>(
   'signin',
   async ({ username, password }) => {
     const response = await fetch(`${API_ENDPOINT_PATH}/signin`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: JSON.stringify({ username, password }),
+      body: 'username=' + username + '&password=' + password,
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -37,9 +38,9 @@ export const signin = createAsyncThunk<Post, { username: string; password: strin
     }
 
     const data = await response.json();
+    console.log(data);
 
-    // JWTをcookieに設定する処理はフロントエンドでは実施しないのが一般的ですが、
-    // 必要に応じてサーバーからのレスポンスヘッダーを確認し、適切に処理を行ってください。
+    // coockieにjwtというキーでUserIdをJWT化した文字列を設定する
 
     return data;
   }

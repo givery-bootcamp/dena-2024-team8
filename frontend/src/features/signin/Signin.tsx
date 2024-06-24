@@ -13,7 +13,7 @@ export function Signin() {
         console.log('Password:', password);
         
         // Reduxの呼び出しをしてログイン情報を保存
-        dispatch(APIService.signin(username, password));
+        dispatch(APIService.signin({username, password}));
     };
 
     return (

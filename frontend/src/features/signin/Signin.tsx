@@ -5,6 +5,7 @@ import { APIService } from '../../shared/services';
 export function Signin() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const dispatch = useAppDispatch();
 
     const handleSignIn = () => {
@@ -13,8 +14,23 @@ export function Signin() {
         console.log('Password:', password);
         
         // Reduxの呼び出しをしてログイン情報を保存
-        dispatch(APIService.signin({username, password}));
-    };
+        dispatch(APIService.signin({ username, password }))
+            .then((response) => {
+                console.log("response", response);
+                // responseからデータを取得し、ログイン成功の処理を行う
+                if (response.payload && response.payload) {
+                    // homeに遷移
+                    window.location.href = "/";
+                } else {
+                    // データが存在しない場合の処理をここに記述
+                    setErrorMessage("ユーザー名またはパスワードが違います。再度お試しください。");
+                }
+            })
+            .catch((error) => {
+                // エラー発生時の処理をここに記述
+                setErrorMessage("サインインに失敗しました。再度お試しください。"+ error.message);
+            });
+        };
 
     return (
         <div className="container-xxl flex justify-center items-center">
@@ -40,6 +56,9 @@ export function Signin() {
                 >
                     Sign In
                 </button>
+                <p className="mt-4 text-red-500">
+                    { errorMessage }
+                </p>
             </div>
         </div>
     );

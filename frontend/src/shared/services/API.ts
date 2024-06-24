@@ -38,9 +38,6 @@ export const signin = createAsyncThunk<User, { username: string, password: strin
     }
 
     const data = await response.json();
-    console.log(data);
-
-    // coockieにjwtというキーでUserIdをJWT化した文字列を設定する
 
     return data;
   }

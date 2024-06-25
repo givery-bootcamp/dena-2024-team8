@@ -16,7 +16,7 @@ pre-commit:
   parallel: true
   commands:
       format-frontend:
-        run: cd frontend && npm run format
+        run: cd frontend && npm run format && npm run lint
 #     eslint:
 #       glob: "*.{js,ts,jsx,tsx}"
 #       run: yarn eslint {staged_files}

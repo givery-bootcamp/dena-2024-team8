@@ -78,7 +78,7 @@ func (r *UserRepository) FindByIPass(username string, password string) (*entitie
 	// println(string(hash))
 
 	var user User
-	result := r.Conn.Where("name = ?", username, password).First(user)
+	result := r.Conn.Where("name = ?", username).First(&user)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			return nil, nil

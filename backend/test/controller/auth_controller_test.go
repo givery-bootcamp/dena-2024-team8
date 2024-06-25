@@ -1,62 +1,64 @@
 package repositories
 
 import (
+	"encoding/json"
 	"myapp/internal/controllers"
+	"myapp/internal/entities"
 	"myapp/internal/external"
-	"myapp/internal/interfaces"
 	"myapp/internal/middleware"
-	"myapp/internal/repositories"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
+	"golang.org/x/crypto/bcrypt"
 )
 
-func Init() {
+func init() {
 	external.SetupDB()
 }
 
-func setupUser() (interfaces.UserRepository, func()) {
-	db := external.DB.Begin()
-	repo := repositories.NewUserRepository(db)
-	teardown := func() {
-		db.Rollback()
-	}
-
-	// Insert test data
-	db.Create(&repositories.User{
-		Name:     "user1",
-		Password: "password1",
-	})
-	db.Create(&repositories.User{
-		Name:     "user2",
-		Password: "password2",
-	})
-	return repo, teardown
-}
-
 func TestSignIn(t *testing.T) {
-	// Setup webserver
-	// app := gin.Default()
-	// app.Use(middleware.Transaction())
-	// app.Use(middleware.Cors())
-	// middleware.SetupRoutes(app)
-	// app.Run(fmt.Sprintf("%s:%d", config.HostName, config.Port))
+	gin.SetMode(gin.TestMode)
 
-	// Create a new Gin context for testing
-	ctx, testApp := gin.CreateTestContext(httptest.NewRecorder())
-	testApp.Use(middleware.Transaction())
-	testApp.Use(middleware.Cors())
-	middleware.SetupRoutes(testApp)
+	// Ginエンジンの初期化
+	r := gin.New()
+	r.Use(middleware.Transaction())
+	r.Use(middleware.Cors())
+	r.POST("/signin", controllers.SignIn)
 
-	// Set the request form values
-	ctx.Request = httptest.NewRequest(http.MethodPost, "/signin", nil)
-	ctx.Request.PostForm = url.Values{
-		"username": {"user1"},
-		"password": {"password1"},
+	// テストリクエストの作成
+	// user passwordをbodyに含める
+	req, err := http.NewRequest(http.MethodPost, "/signin", nil)
+	assert.NoError(t, err)
+
+	testCases := []struct{ username, password string }{
+		{"taro", "password"},
+		{"hanako", "PASSWORD"},
 	}
 
-	controllers.SignIn(ctx)
+	for _, tc := range testCases {
+		// テストリクエストにbodyを追加
+		req.PostForm = make(map[string][]string)
+		req.PostForm.Add("username", tc.username)
+		req.PostForm.Add("password", tc.password)
+
+		// レスポンスのレコーダーを作成
+		w := httptest.NewRecorder()
+
+		// テストリクエストを実行
+		r.ServeHTTP(w, req)
+
+		ru := entities.User{}
+		err = json.Unmarshal(w.Body.Bytes(), &ru)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, tc.username, ru.Name)
+		err := bcrypt.CompareHashAndPassword([]byte(ru.Password), []byte(tc.password))
+		assert.NoError(t, err)
+	}
 }

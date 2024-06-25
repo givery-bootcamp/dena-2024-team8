@@ -52,3 +52,18 @@ func ConvertUserRepositoryModelToEntity(user *User) *entities.User {
 		DeletedAt: user.DeletedAt,
 	}
 }
+
+func (r *UserRepository) Get(id int) (*entities.User, error) {
+	user := &User{}
+	result := r.Conn.Where("id = ?", id).First(user)
+
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return nil, nil
+	}
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return ConvertUserRepositoryModelToEntity(user), nil
+}

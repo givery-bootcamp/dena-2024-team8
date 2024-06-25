@@ -75,3 +75,18 @@ func (r *UserRepository) FindByIPass(username string, password string) (*entitie
 	}
 	return ConvertUserRepositoryModelToEntity(&user), nil
 }
+
+func (r *UserRepository) Get(id int) (*entities.User, error) {
+	user := &User{}
+	result := r.Conn.Where("id = ?", id).First(user)
+
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return nil, nil
+	}
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return ConvertUserRepositoryModelToEntity(user), nil
+}

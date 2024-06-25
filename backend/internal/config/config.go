@@ -13,6 +13,7 @@ var DBPort = 3306
 var DBName = "training"
 var DBUser = "root"
 var DBPassword = ""
+var JwtSecret = ""
 
 func init() {
 	if v := os.Getenv("HOSTNAME"); v != "" {
@@ -38,5 +39,8 @@ func init() {
 	}
 	if v := os.Getenv("DB_PASSWORD"); v != "" {
 		DBPassword = v
+	}
+	if v := os.Getenv("JWT_SECRET"); v != "" {
+		JwtSecret = v
 	}
 }

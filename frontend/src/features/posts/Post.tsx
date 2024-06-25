@@ -18,7 +18,9 @@ export const Post = () => {
 
     if(postDetail == undefined){
         return(
-            <Spinner />
+            <div className="max-w-xl mx-auto bg-white overflow-hidden md:max-w-2xl my-4">
+                <Spinner />
+            </div>
         )
     }
 

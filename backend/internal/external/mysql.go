@@ -20,7 +20,6 @@ func SetupDB() {
 	dbpass := config.DBPassword
 	dbuser := config.DBUser
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", dbuser, dbpass, host, port, dbname)
-	fmt.Println(dsn)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Println(err)

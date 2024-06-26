@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Post } from "../posts/Post";
 import { PostList } from "../posts";
 
 export const SearchRouter = () => {
@@ -32,7 +31,7 @@ export const SearchRouter = () => {
         </button>
       </form>
       <hr />
-      <PostList
+      <PostList />
     </div>
   );
 };

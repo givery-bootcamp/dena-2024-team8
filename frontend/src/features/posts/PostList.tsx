@@ -1,25 +1,23 @@
-import { useEffect } from 'react';
+import { Post } from "../../shared/models";
+import { PostCard } from "../../components/card/PostCard";
 
-import { useAppDispatch, useAppSelector } from '../../shared/hooks';
-import { APIService } from '../../shared/services';
+type PostListProps = {
+  posts: Post[];
+};
 
-import { Post } from '../../shared/models';
-import { PostCard } from '../../components/card/PostCard';
-
-export const PostList = () => {
-  const { postList } = useAppSelector((state) => state.post);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(APIService.getPostList());
-  }, [dispatch]);
-
-  return (  
-    <div className="w-3/4 p-4">
-      {postList && postList.map((post: Post, index: number) => (
-        <PostCard key={index} title={post.Title} content={post.Body} date={post.CreatedAt} postId = {post.id}/>
-      ))}
+export const PostList = ({ posts }: PostListProps) => {
+  return (
+    <div className="w-full mt-4 py-4">
+      {posts &&
+        posts.map((post: Post, index: number) => (
+          <PostCard
+            key={index}
+            title={post.Title}
+            content={post.Body}
+            date={post.CreatedAt}
+            postId={post.id}
+          />
+        ))}
     </div>
   );
 };
-

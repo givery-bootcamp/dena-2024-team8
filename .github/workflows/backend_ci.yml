@@ -67,7 +67,8 @@ jobs:
       - name: Run Test
         run: go test -v ./test/...
         env:
-          DB_HOSTNAME: localhost 
+          DB_HOSTNAME: "127.0.0.1"
+          JWT_SECRET: "jwt-secret"
 
 
   backend_lint:

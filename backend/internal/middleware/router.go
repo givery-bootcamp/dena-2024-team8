@@ -5,8 +5,8 @@ import (
 	"myapp/internal/controllers"
 
 	"github.com/gin-gonic/gin"      // swagger embed files
-	"github.com/swaggo/files"
-	"github.com/swaggo/gin-swagger" // gin-swagger middleware
+    "github.com/swaggo/files"
+    "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
 // @title Example API
@@ -28,5 +28,7 @@ func SetupRoutes(app *gin.Engine) {
 	app.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	auth := app.Group("/auth", Auth())
 	auth.GET("/user", controllers.UserDetail)
-	// Userのエンドポイントを設定
+
+	authroot := app.Group("/", Auth())
+	authroot.POST("/posts", controllers.PostCreate)
 }

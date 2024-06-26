@@ -8,17 +8,17 @@ definitions:
     properties:
       body:
         type: string
-      createdAt:
+      created_at:
         type: string
-      deletedAt:
+      deleted_at:
         type: string
       id:
         type: integer
       title:
         type: string
-      updatedAt:
+      update_at:
         type: string
-      userId:
+      user_id:
         type: integer
     type: object
 info:
@@ -53,6 +53,44 @@ paths:
           schema:
             $ref: '#/definitions/controllers.ErrorResponse'
       summary: get post list
+      tags:
+      - post
+    post:
+      consumes:
+      - application/json
+      description: create post
+      operationId: create-post
+      parameters:
+      - description: タイトル (最大100文字)
+        in: query
+        name: title
+        required: true
+        type: string
+      - description: 本文
+        in: query
+        name: body
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.Post'
+        "400":
+          description: タイトルは100文字以下である必要があります。
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "401":
+          description: 認証が必要です。
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: create post
       tags:
       - post
   /posts/{postId}:

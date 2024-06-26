@@ -1,9 +1,10 @@
 import { Routes, Route } from "react-router-dom";
+
 import { MainLayout } from "./MainLayout";
 import { Home } from "../features/home";
 import { Post } from "../features/posts/Post";
 import { Signin } from "../features/signin";
-import SearchRouter from "../features/search/SearchRouter";
+import { SearchRouter } from "../features/search/SearchRouter";
 
 export const AppRoute = () => {
   return (

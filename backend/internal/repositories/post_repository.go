@@ -41,6 +41,26 @@ func (r *PostRepository) Get(id int) (*entities.Post, error) {
 	return posts[0], nil
 }
 
+func (r *PostRepository) Create(title, body string, userId int) (*entities.Post, error) {
+	post := Post{
+		Title:     title,
+		Body:      body,
+		UserId:    userId,
+		DeletedAt: time.Date(9998, 12, 31, 23, 59, 59, 0, time.UTC),
+	}
+	var result = r.Conn.Create(&post)
+
+	// user 情報を取得
+	var user User
+	r.Conn.First(&user, userId)
+	post.User = user
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return convertPostRepositoryModelToEntity(&post, &post.User), nil
+}
+
 func (r *PostRepository) List(id *int, limit int, offset int) ([]*entities.Post, error) {
 	var obj []Post
 	var result *gorm.DB

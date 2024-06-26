@@ -58,9 +58,9 @@ func (u *UserUsecase) VerifyUserAndGenerateJWT(username, password string) (*enti
 	}
 }
 
-// func (u *PostUsecase) Get(id int) (*entities.Post, error) {
-// 	return u.repository.Get(id)
-// }
-	func (u *UserUsecase) Get(id int) (*entities.User, error) {
-		return u.repository.Get(id)
-	}
+//	func (u *PostUsecase) Get(id int) (*entities.Post, error) {
+//		return u.repository.Get(id)
+//	}
+func (u *UserUsecase) Get(id int) (*entities.User, error) {
+	return u.repository.Get(id)
+}

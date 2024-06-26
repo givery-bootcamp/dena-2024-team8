@@ -5,7 +5,6 @@ import (
 	"myapp/internal/entities"
 	"time"
 
-	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -52,28 +51,6 @@ func ConvertUserRepositoryModelToEntity(user *User) *entities.User {
 		UpdatedAt: user.UpdatedAt,
 		DeletedAt: user.DeletedAt,
 	}
-}
-
-func (r *UserRepository) FindByIPass(username string, password string) (*entities.User, error) {
-	// SignUpの時にここの処理を使って、パスワードをハッシュ化してDBに保存する
-	// hash, _ := bcrypt.GenerateFromPassword([]byte(password), 12)
-	// println(string(hash))
-
-	var user User
-	result := r.Conn.Where("name = ?", username).First(&user)
-	if result.Error != nil {
-		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return nil, nil
-		} else {
-			return nil, result.Error
-		}
-	}
-	// ユーザのパスワードと与えられたパスワードを比較
-	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
-	if err != nil {
-		return nil, err
-	}
-	return ConvertUserRepositoryModelToEntity(&user), nil
 }
 
 func (r *UserRepository) Get(id int) (*entities.User, error) {

@@ -1,7 +1,7 @@
 export type PostList = Array<Post>;
   
 export type Post = {
-    id: number;
+    Id: number;
     UserId: number;
     Title: string;
     Body: string;

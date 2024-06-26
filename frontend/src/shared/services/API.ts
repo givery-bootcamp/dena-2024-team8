@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { Hello } from '../models';
-import { PostList, Post, User, SignOutResponse } from '../models';
+import { PostList, Post, User, SignOutResponse, ErrorResponse } from '../models';
 
 const API_ENDPOINT_PATH =
   import.meta.env.VITE_API_ENDPOINT_PATH ?? '';
@@ -58,3 +58,21 @@ export const signout = createAsyncThunk<SignOutResponse>(
     return data;
   }
 );
+
+export const getUser = createAsyncThunk<User | ErrorResponse>('getUser', async () => {
+  console.log("jwt=" + localStorage.getItem('jwt'));
+  const output = document.getElementById("cookies");
+  const jwt = output!.innerHTML = "jwt=" + localStorage.getItem('jwt');
+  console.log(jwt);
+  const response = await fetch(`${API_ENDPOINT_PATH}/user`,
+    {
+      method: 'GET',
+      body: "jwt=" + localStorage.getItem('jwt'),
+      credentials: 'include',
+    }
+  );
+  if (!response.ok) {
+    throw new Error('ユーザー情報の取得に失敗しました。');
+  }
+  return await response.json();
+});

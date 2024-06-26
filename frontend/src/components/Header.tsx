@@ -1,9 +1,20 @@
-import { FaBars } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import SignoutButton from "./button/SignoutButton";
+import { useMemo } from "react";
+import { useAppDispatch} from "../shared/hooks";
+import { APIService } from "../shared/services";
 
 export const Header = () => {
   const navigator = useNavigate();
+  const dispatch = useAppDispatch();
+  // ユーザーがログインしているかどうかを判定する
+  const getUser = () => {
+    console.log("getUser");
+    dispatch(APIService.getUser());
+  }
+  const user = useMemo(() => getUser(), []); 
+  console.log(user);
+  
   return (
     <header className="bg-gray-100">
       <nav

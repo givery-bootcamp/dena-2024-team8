@@ -31,4 +31,5 @@ func SetupRoutes(app *gin.Engine) {
 
 	authroot := app.Group("/", Auth())
 	authroot.POST("/posts", controllers.PostCreate)
+	authroot.PUT("/posts/:postId", controllers.PostUpdate)
 }

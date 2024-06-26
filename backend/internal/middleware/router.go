@@ -28,5 +28,7 @@ func SetupRoutes(app *gin.Engine) {
 	app.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	auth := app.Group("/auth", Auth())
 	auth.GET("/user", controllers.UserDetail)
+	authroot := app.Group("/", Auth())
+	authroot.DELETE("/posts/:postId", controllers.PostDelete)
 	// Userのエンドポイントを設定
 }

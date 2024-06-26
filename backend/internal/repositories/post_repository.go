@@ -64,6 +64,17 @@ func (r *PostRepository) List(id *int, limit int, offset int) ([]*entities.Post,
 	return pes, nil
 }
 
+func (r *PostRepository) Delete(id int) error {
+	result := r.Conn.Delete(&Post{}, id)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return errors.New("not found")
+	}
+	return nil
+}
+
 // convertSlices は []T を []U へ変換します
 func convertSlices[T, U any](srcList []T, convertFunc func(*T) U) []U {
 	var result []U

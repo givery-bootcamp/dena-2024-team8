@@ -50,6 +50,11 @@ func (r *PostRepository) Create(title, body string, userId int) (*entities.Post,
 	}
 	var result = r.Conn.Create(&post)
 
+	// user 情報を取得
+	var user User
+	r.Conn.First(&user, userId)
+	post.User = user
+
 	if result.Error != nil {
 		return nil, result.Error
 	}

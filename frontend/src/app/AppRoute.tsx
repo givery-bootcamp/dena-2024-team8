@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-
 import { MainLayout } from "./MainLayout";
 import { Home } from "../features/home";
 import { Post } from "../features/posts/Post";

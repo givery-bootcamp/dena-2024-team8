@@ -6,6 +6,6 @@ import (
 
 type UserRepository interface {
 	VerifyUser(username, password string) (*entities.User, error)
-	FindByIPass(username, password string) (*entities.User, error)
 	Get(id int) (*entities.User, error)
+	FindByIPass(username, password string) (*entities.User, error)
 }

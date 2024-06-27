@@ -60,7 +60,8 @@ func (r *CommentRepository) Update(commentId int, body string, userId int) (*ent
 		UpdatedAt: time.Now(),
 	}
 	// Check if the user is the owner of the comment
-	var commentResult = r.Conn.First(&comment, commentId)
+	var cc *Comment
+	var commentResult = r.Conn.First(&cc, commentId)
 	if commentResult.Error != nil {
 		log.Println("Comment compatible with the commentID is not found")
 		return nil, commentResult.Error

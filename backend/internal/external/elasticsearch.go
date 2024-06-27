@@ -44,23 +44,68 @@ func syncDataToElasticSearch() {
 			log.Fatalf("Error marshaling post ID=%d: %s", post.Id, err)
 		}
 
-		req := esapi.IndexRequest{
-			Index:      "posts",
-			DocumentID: fmt.Sprintf("%d", post.Id),
-			Body:       strings.NewReader(string(postJson)),
-			Refresh:    "true",
-		}
+		SendCreateRequest("posts", fmt.Sprintf("%d", post.Id), "true", postJson)
+	}
+}
 
-		res, err := req.Do(context.Background(), ES)
-		if err != nil {
-			log.Fatalf("Error indexing document ID=%d: %s", post.Id, err)
-		}
-		defer res.Body.Close()
+func SendCreateRequest(index, documentID, refresh string, body []byte) {
+	req := esapi.IndexRequest{
+		Index:      index,
+		DocumentID: documentID,
+		Body:       strings.NewReader(string(body)),
+		Refresh:    refresh,
+	}
 
-		if res.IsError() {
-			log.Printf("Error indexing document ID=%d: %s", post.Id, res.String())
-		} else {
-			log.Printf("Successfully indexed document ID=%d", post.Id)
-		}
+	res, err := req.Do(context.Background(), ES)
+	if err != nil {
+		log.Fatalf("Error indexing document ID=%s: %s", documentID, err)
+	}
+	defer res.Body.Close()
+
+	if res.IsError() {
+		log.Printf("Error indexing document ID=%s: %s", documentID, res.String())
+	} else {
+		log.Printf("Successfully indexed document ID=%s", documentID)
+	}
+}
+
+func SendUpdateRequest(index, documentID, refresh string, body []byte) {
+	req := esapi.UpdateRequest{
+		Index:      index,
+		DocumentID: documentID,
+		Body:       strings.NewReader(string(body)),
+		Refresh:    refresh,
+	}
+
+	res, err := req.Do(context.Background(), ES)
+	if err != nil {
+		log.Fatalf("Error updating document ID=%s: %s", documentID, err)
+	}
+	defer res.Body.Close()
+
+	if res.IsError() {
+		log.Printf("Error updating document ID=%s: %s", documentID, res.String())
+	} else {
+		log.Printf("Successfully updated document ID=%s", documentID)
+	}
+}
+
+func SendDeleteRequest(index, documentID, refresh string) {
+	req := esapi.DeleteRequest{
+		Index:      index,
+		DocumentID: documentID,
+		Refresh:    refresh,
+	}
+
+	res, err := req.Do(context.Background(), ES)
+	if err != nil {
+		log.Fatalf("Error deleting document ID=%s: %s", documentID, err)
+	}
+	defer res.Body.Close()
+
+	if res.IsError() {
+		log.Printf("Error deleting document ID=%s: %s", documentID, res.String())
+	} else {
+		log.Printf("Successfully deleted document ID=%s", documentID)
 	}
 }

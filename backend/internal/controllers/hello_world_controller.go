@@ -28,7 +28,7 @@ func HelloWorld(ctx *gin.Context) {
 
 func validateHelloWorldParameters(lang string) error {
 	if len(lang) != 2 {
-		return errors.New(fmt.Sprintf("Invalid lang parameter: %s", lang))
+		return fmt.Errorf(fmt.Sprintf("Invalid lang parameter: %s", lang))
 	}
 	return nil
 }

@@ -173,3 +173,51 @@ func PostDetail(ctx *gin.Context) {
 		handleError(ctx, 404, errors.New("not found"))
 	}
 }
+
+// PostCreate godoc
+// @Summary create post
+// @Description create post
+// @ID create-post
+// @Tags post
+// @Accept  json
+// @Produce  json
+// @Param title query string true "タイトル (最大100文字)"
+// @Param body query string true "本文"
+// @Success 200 {object} Post
+// @Failure 400 {object} ErrorResponse "タイトルと本文は必須です。"
+// @Failure 400 {object} ErrorResponse "タイトルは100文字以下である必要があります。"
+// @Failure 401 {object} ErrorResponse "認証が必要です。"
+// @Failure 500 {object} ErrorResponse "Internal Server Error"
+// @Router /posts [post]
+func PostCreate(ctx *gin.Context) {
+	userId := ctx.GetInt("userId")
+	title := ctx.PostForm("title")
+	body := ctx.PostForm("body")
+
+	// ユーザーIDが取得できない場合は認証エラー
+	if userId == 0 {
+		handleError(ctx, 401, errors.New("authentication required"))
+		return
+	}
+
+	// タイトルと本文は必須
+	if title == "" || body == "" {
+		handleError(ctx, 400, errors.New("title and body are required"))
+		return
+	}
+
+	// タイトルは100文字以下
+	if len(title) > 100 {
+		handleError(ctx, 400, errors.New("title is too long"))
+		return
+	}
+
+	repository := repositories.NewPostRepository(DB(ctx))
+	usecase := usecases.NewPostUsecase(repository)
+	result, err := usecase.Create(title, body, userId)
+	if err != nil {
+		handleError(ctx, 500, err)
+	} else {
+		ctx.JSON(200, result)
+	}
+}

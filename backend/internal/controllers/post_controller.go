@@ -1,11 +1,16 @@
 package controllers
 
 import (
+	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"myapp/internal/entities"
+	"myapp/internal/external"
 	"myapp/internal/repositories"
 	"myapp/internal/usecases"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -57,6 +62,84 @@ func PostList(ctx *gin.Context) {
 		}
 		ctx.JSON(200, result)
 	}
+}
+
+func PostSearch(c *gin.Context) {
+	query := c.Query("q")
+
+	var searchQuery string
+	if query == "" {
+		// Query is empty, search for all documents
+		searchQuery = `{
+			"query": {
+				"match_all": {}
+			}
+		}`
+	} else {
+		searchQuery = fmt.Sprintf(`{
+			"query": {
+				"multi_match": {
+					"query": "%s",
+					"fields": ["title", "body"]
+				}
+			}
+		}`, query)
+	}
+
+	var buf strings.Builder
+	buf.WriteString(searchQuery)
+
+	res, err := external.ES.Search(
+		external.ES.Search.WithContext(context.Background()),
+		external.ES.Search.WithIndex("posts"),
+		external.ES.Search.WithBody(strings.NewReader(buf.String())),
+		external.ES.Search.WithTrackTotalHits(true),
+		external.ES.Search.WithPretty(),
+	)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+	defer res.Body.Close()
+
+	if res.IsError() {
+		var e map[string]interface{}
+		if err := json.NewDecoder(res.Body).Decode(&e); err != nil {
+			c.JSON(500, gin.H{"error": fmt.Sprintf("Error parsing the response body: %s", err)})
+			return
+		} else {
+			c.JSON(500, gin.H{"error": fmt.Sprintf("Error: %s: %s", res.Status(), e["error"].(map[string]interface{})["reason"])})
+			return
+		}
+	}
+
+	var r map[string]interface{}
+	if err := json.NewDecoder(res.Body).Decode(&r); err != nil {
+		c.JSON(500, gin.H{"error": fmt.Sprintf("Error parsing the response body: %s", err)})
+		return
+	}
+
+	posts := make([]Post, 0)
+
+	hits, ok := r["hits"].(map[string]interface{})
+	if !ok || hits["hits"] == nil {
+		// No hits found, handle empty result case
+		c.JSON(200, posts)
+		return
+	}
+
+	for _, hit := range hits["hits"].([]interface{}) {
+		source := hit.(map[string]interface{})["_source"].(map[string]interface{})
+		id, _ := source["id"].(float64) // Type assertion with fallback
+		post := Post{
+			Id:    int(id),
+			Title: source["title"].(string),
+			Body:  source["body"].(string),
+		}
+		posts = append(posts, post)
+	}
+
+	c.JSON(200, posts)
 }
 
 // PostDetail godoc
@@ -134,6 +217,75 @@ func PostCreate(ctx *gin.Context) {
 	result, err := usecase.Create(title, body, userId)
 	if err != nil {
 		handleError(ctx, 500, err)
+	} else {
+		ctx.JSON(200, result)
+	}
+}
+
+// backend
+// endpoint: PUT /posts/:postId
+// parameters: JSON
+// title: string(必須。100文字以下)
+// body: string(必須)
+// 認証: 必要
+// response:
+// 200 更新されたPostエンティティ
+// 400 対象の投稿の作成者が自分ではない場合
+
+// PostUpdate godoc
+// @Summary update post
+// @Description update post
+// @ID update-post
+// @Tags post
+// @Accept  json
+// @Produce  json
+// @Param postId path int true "Post ID"
+// @Param title query string true "タイトル (最大100文字)"
+// @Param body query string true "本文"
+// @Success 200 {object} Post
+// @Failure 400 {object} ErrorResponse "タイトルと本文は必須です。"
+// @Failure 400 {object} ErrorResponse "タイトルは100文字以下である必要があります。"
+// @Failure 401 {object} ErrorResponse "認証が必要です。"
+// @Failure 400 {object} ErrorResponse "対象の投稿の作成者が自分ではない場合"
+// @Failure 500 {object} ErrorResponse "Internal Server Error"
+// @Router /posts/{postId} [put]
+func PostUpdate(ctx *gin.Context) {
+	userId := ctx.GetInt("userId")
+	sid := ctx.Param("postId")
+	id, err := strconv.Atoi(sid)
+	if err != nil {
+		handleError(ctx, 500, err)
+	}
+
+	title := ctx.PostForm("title")
+	body := ctx.PostForm("body")
+
+	// ユーザーIDが取得できない場合は認証エラー
+	if userId == 0 {
+		handleError(ctx, 401, errors.New("authentication required"))
+		return
+	}
+
+	// タイトルと本文は必須
+	if title == "" || body == "" {
+		handleError(ctx, 400, errors.New("title and body are required"))
+		return
+	}
+
+	// タイトルは100文字以下
+	if len(title) > 100 {
+		handleError(ctx, 400, errors.New("title is too long"))
+		return
+	}
+
+	repository := repositories.NewPostRepository(DB(ctx))
+	usecase := usecases.NewPostUsecase(repository)
+	result, err := usecase.Update(title, body, userId, id)
+	if err != nil {
+		handleError(ctx, 500, err)
+	}
+	if result == nil {
+		handleError(ctx, 400, errors.New("you are not the author of this post"))
 	} else {
 		ctx.JSON(200, result)
 	}

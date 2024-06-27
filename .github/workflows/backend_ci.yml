@@ -94,7 +94,7 @@ jobs:
           # Github Status へのレポートレベルの指定
           level: warning
           workdir: backend/
-          golangci_lint_flags: "--config=.golangci.yml"
+          golangci_lint_flags: "--config=.golangci.yml --timeout 5m"
 
   backend_build_check:
     runs-on: ubuntu-latest

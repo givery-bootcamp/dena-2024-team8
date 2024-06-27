@@ -1,6 +1,9 @@
 import { FaBars } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import SignoutButton from "./button/SignoutButton";
 
 export const Header = () => {
+  const navigator = useNavigate();
   return (
     <header className="bg-blue-300">
       <nav
@@ -17,19 +20,12 @@ export const Header = () => {
             />
           </a>
         </div>
-        <div className="flex lg:hidden">
-          <button
-            type="button"
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-          >
-            <span className="sr-only">Open main menu</span>
-            <FaBars className="h-6 w-6" aria-hidden="true" />
+
+        <div className="lg:flex lg:flex-1 lg:justify-end">
+          <SignoutButton />
+          <button onClick={() => {navigator('/signin')}} className="lg:justify-end bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Login
           </button>
-        </div>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="/signin" className="text-sm font-semibold leading-6 text-gray-900">
-            Log in <span aria-hidden="true">&rarr;</span>
-          </a>
         </div>
       </nav>
     </header>

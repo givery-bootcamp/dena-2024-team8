@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { Hello } from '../models';
-import { PostList, Post, User } from '../models';
+import { PostList, Post, User, SignOutResponse } from '../models';
 
 const API_ENDPOINT_PATH =
   import.meta.env.VITE_API_ENDPOINT_PATH ?? '';
@@ -39,6 +39,22 @@ export const signin = createAsyncThunk<User, { username: string, password: strin
 
     const data = await response.json();
 
+    return data;
+  }
+);
+
+export const signout = createAsyncThunk<SignOutResponse>(
+  'signout',
+  async () => {
+    const response = await fetch(`${API_ENDPOINT_PATH}/signout`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+    if (!response.ok) {
+      throw new Error('サインアウトに失敗しました。');
+    }
+    const data = await response.json();
+    
     return data;
   }
 );

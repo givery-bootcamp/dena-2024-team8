@@ -4,7 +4,7 @@ import { SignOutResponse } from '../models';
 import { APIService } from '../services';
 
 export type SignoutState = {
-    Signout ?: SignOutResponse;
+    signout ?: SignOutResponse;
 }
 
 export const initialState : SignoutState =  {}; 
@@ -15,7 +15,7 @@ export const signoutSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(APIService.signout.fulfilled, (state, action) => {
-            state.Signout = action.payload;
+            state.signout = action.payload;
         });
     },
 });

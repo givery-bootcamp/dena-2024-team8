@@ -10,7 +10,3 @@ export interface User {
 export interface SignOutResponse {
     message: string;
 }
-
-export interface ErrorResponse {
-    error: string;
-}

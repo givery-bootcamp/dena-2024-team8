@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { ErrorResponse, User } from '../models';
+import { User } from '../models';
 import { APIService } from '../services';
 
 export type UserState = {
-    User ?: User | ErrorResponse;
+    user ?: User;
+    error ?: string;
 }
 
 export const initialState : UserState =  {}; 
@@ -15,7 +16,10 @@ export const userSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(APIService.getUser.fulfilled, (state, action) => {
-            state.User = action.payload;
+            state.user = action.payload;
+        });
+        builder.addCase(APIService.getUser.rejected, (state, action) => {
+            state.error = action.error.message;
         });
     },
 });

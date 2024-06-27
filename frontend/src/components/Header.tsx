@@ -1,19 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import SignoutButton from "./button/SignoutButton";
-import { useMemo } from "react";
-import { useAppDispatch} from "../shared/hooks";
+import { useEffect, useMemo, useState } from "react";
+import { useAppDispatch, useAppSelector} from "../shared/hooks";
 import { APIService } from "../shared/services";
 
 export const Header = () => {
   const navigator = useNavigate();
   const dispatch = useAppDispatch();
+  const { user, error } = useAppSelector((state) => state.user);
   // ユーザーがログインしているかどうかを判定する
-  const getUser = () => {
-    console.log("getUser");
-    dispatch(APIService.getUser());
-  }
-  const user = useMemo(() => getUser(), []); 
-  console.log(user);
+  useEffect(() => {
+    dispatch(APIService.getUser())
+    if (error) {
+      navigator('/signin');
+    }
+  }, [dispatch, user, error]);
   
   return (
     <header className="bg-blue-300">
@@ -33,10 +34,11 @@ export const Header = () => {
         </div>
 
         <div className="lg:flex lg:flex-1 lg:justify-end">
-          <SignoutButton />
-          <button onClick={() => {navigator('/signin')}} className="lg:justify-end bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          { error ? 
+            <button onClick={() => {navigator('/signin')}} className="lg:justify-end bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Login
-          </button>
+          </button> :<SignoutButton />
+          }
         </div>
       </nav>
     </header>

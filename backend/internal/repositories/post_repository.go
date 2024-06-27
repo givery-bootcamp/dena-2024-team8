@@ -61,6 +61,38 @@ func (r *PostRepository) Create(title, body string, userId int) (*entities.Post,
 	return convertPostRepositoryModelToEntity(&post, &post.User), nil
 }
 
+func (r *PostRepository) Update(title, body string, userId, postId int) (*entities.Post, error) {
+	var post Post
+	result := r.Conn.First(&post, postId)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	// 投稿者が異なる場合は更新しない
+	if post.UserId != userId {
+		return nil, nil
+	}
+
+	// 更新
+	post.Title = title
+	post.Body = body
+	post.UserId = userId
+	result = r.Conn.Save(&post)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	// user 情報を取得
+	var user User
+	result = r.Conn.First(&user, userId)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	post.User = user
+
+	return convertPostRepositoryModelToEntity(&post, &user), nil
+}
+
 func (r *PostRepository) List(id *int, limit int, offset int) ([]*entities.Post, error) {
 	var obj []Post
 	var result *gorm.DB

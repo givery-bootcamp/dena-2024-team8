@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../shared/hooks";
 import { APIService } from "../../shared/services";
+import { Spinner } from "../../components/Spinner";
 
 export const Post = () => {
     const { postId } = useParams();
@@ -17,9 +18,9 @@ export const Post = () => {
 
     if(postDetail == undefined){
         return(
-            <>
-                ロード中
-            </>
+            <div className="max-w-xl mx-auto bg-white overflow-hidden md:max-w-2xl my-4">
+                <Spinner />
+            </div>
         )
     }
 

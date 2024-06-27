@@ -42,7 +42,7 @@ func generateJWT(userId int) (string, error) {
 }
 
 func (u *UserUsecase) VerifyUserAndGenerateJWT(username, password string) (*entities.User, *string, error) {
-	var user, err = u.repository.VerifyUser(username, password)
+	var user, err = u.repository.FindByIPass(username, password)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -58,9 +58,9 @@ func (u *UserUsecase) VerifyUserAndGenerateJWT(username, password string) (*enti
 	}
 }
 
-// func (u *PostUsecase) Get(id int) (*entities.Post, error) {
-// 	return u.repository.Get(id)
-// }
-	func (u *UserUsecase) Get(id int) (*entities.User, error) {
-		return u.repository.Get(id)
-	}
+//	func (u *PostUsecase) Get(id int) (*entities.Post, error) {
+//		return u.repository.Get(id)
+//	}
+func (u *UserUsecase) Get(id int) (*entities.User, error) {
+	return u.repository.Get(id)
+}

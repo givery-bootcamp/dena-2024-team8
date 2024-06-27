@@ -3,9 +3,9 @@ import { PostList } from "../posts/PostList";
 
 export function Home() {
   return (
-    <div className="container-xxl">
-      <div className="row">
-        <div className="border bg-white vh-100 p-3">
+    <div className="h-full">
+      <div className="row px-8">
+        <div>
           <PostForm />
           <hr />
           <PostList />

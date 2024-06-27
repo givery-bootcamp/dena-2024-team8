@@ -16,7 +16,7 @@ export const Header = () => {
   console.log(user);
   
   return (
-    <header className="bg-gray-100">
+    <header className="bg-blue-300">
       <nav
         className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
         aria-label="Global"

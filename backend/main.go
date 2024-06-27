@@ -11,6 +11,8 @@ import (
 func main() {
 	// Initialize database
 	external.SetupDB()
+	// Initialize Elasticsearch
+	external.InitElasticSearch()
 
 	// Setup webserver
 	app := gin.Default()

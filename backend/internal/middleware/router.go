@@ -4,9 +4,9 @@ import (
 	_ "myapp/docs"
 	"myapp/internal/controllers"
 
-	"github.com/gin-gonic/gin"      // swagger embed files
-	"github.com/swaggo/files"
-	"github.com/swaggo/gin-swagger" // gin-swagger middleware
+	"github.com/gin-gonic/gin" // swagger embed files
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
 // @title Example API
@@ -22,6 +22,7 @@ func SetupRoutes(app *gin.Engine) {
 	app.GET("/hello", controllers.HelloWorld)
 	app.GET("/posts", controllers.PostList)
 	app.GET("/posts/:postId", controllers.PostDetail)
+	app.GET("/search", controllers.PostSearch)
 	app.POST("/signin", controllers.SignIn)
 	app.POST("/signout", controllers.SignOut)
 	// Swaggerのエンドポイントを設定

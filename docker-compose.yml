@@ -12,10 +12,15 @@ services:
     depends_on:
       db: 
         condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
     environment:
       TZ: Asia/Tokyo
     env_file:
       - .env
+    networks:
+      - esnet
+
   frontend:
     image: node:20.12.2
     working_dir: /home/node/myapp
@@ -27,6 +32,9 @@ services:
     command: "bash -c 'npm i && npm run dev'"
     environment:
       TZ: Asia/Tokyo
+    networks:
+      - esnet
+
   db:
     build:
       context: ./docker
@@ -46,3 +54,48 @@ services:
       timeout: 1s
       retries: 6
       start_period: 2s
+    networks:
+      - esnet
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.1
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - esnet
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsSL http://localhost:9200/_cat/health | grep -q 'yellow' || grep -q 'green'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.14.1
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    networks:
+      - esnet
+
+volumes:
+  esdata:
+    driver: local
+
+networks:
+  esnet:
+    driver: bridge

@@ -6,7 +6,7 @@ import (
 )
 
 type HelloErrorResponse struct {
-	Message string "json:`message`"
+	Message string `json:"message"`
 }
 
 func DB(ctx *gin.Context) *gorm.DB {

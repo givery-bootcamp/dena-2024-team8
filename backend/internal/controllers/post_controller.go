@@ -9,6 +9,7 @@ import (
 	"myapp/internal/external"
 	"myapp/internal/repositories"
 	"myapp/internal/usecases"
+	"net/http"
 	"strconv"
 	"strings"
 	"time"
@@ -288,5 +289,35 @@ func PostUpdate(ctx *gin.Context) {
 		handleError(ctx, 400, errors.New("you are not the author of this post"))
 	} else {
 		ctx.JSON(200, result)
+	}
+}
+
+// PostDelete godoc
+// @Summary delete post by id
+// @Description delete post by id
+// @ID delete-post-by-id
+// @Tags post
+// @Accept  json
+// @Produce  json
+// @Param postId path int true "Post ID デフォルトで1から2までしかデータがありません。"
+// @Success 200
+// @Failure 400 {object} ErrorResponse "不正なpostID"
+// @Failure 404 {object} ErrorResponse "ポストが見つからない"
+// @Failure 500 {object} ErrorResponse "Internal Server Error"
+// @Router /posts/{postId} [delete]
+func PostDelete(ctx *gin.Context) {
+	sid := ctx.Param("postId")
+	id, err := strconv.Atoi(sid)
+	if err != nil {
+		handleError(ctx, 500, err)
+	}
+
+	repository := repositories.NewPostRepository(DB(ctx))
+	usecase := usecases.NewPostUsecase(repository)
+	err = usecase.Delete(id)
+	if err != nil {
+		handleError(ctx, 500, err)
+	} else {
+		ctx.Status(http.StatusOK)
 	}
 }

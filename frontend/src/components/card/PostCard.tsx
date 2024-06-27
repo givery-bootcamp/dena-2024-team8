@@ -1,19 +1,17 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { Post } from "../../shared/models";
 
 type PostCardProps = {
-  title: string;
-  content: string;
-  date: string;
-  postId : number;
-}
+  post: Post;
+};
 
-export const PostCard = ({ title, content, date ,postId}: PostCardProps) => {
+export const PostCard = ({ post }: PostCardProps) => {
   return (
-    <Link to={`/posts/${postId}`}>
+    <Link to={`/posts/${post.id}`}>
       <div className="border p-4 mb-4 rounded shadow-sm">
-        <h3 className="font-bold text-lg mb-2">{title}</h3>
-        <p className="mb-2">{content}</p>
-        <time className="text-gray-500">{date}</time>
+        <h3 className="font-bold text-lg mb-2">{post.title}</h3>
+        <p className="mb-2">{post.body}</p>
+        <time className="text-gray-500">{post.created_at}</time>
       </div>
     </Link>
   );

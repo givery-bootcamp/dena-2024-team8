@@ -28,9 +28,9 @@ export const Post = () => {
     <div className="max-w-xl mx-auto bg-white shadow-md overflow-hidden md:max-w-2xl my-4">
       <div className="md:flex">
         <div className="p-8">
-          <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
+          <h2 className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
             {postDetail.title}
-          </div>
+          </h2>
           <p className="mt-2 text-gray-500">{postDetail.body}</p>
           <div className="mt-4">
             <span className="text-gray-600 text-sm">

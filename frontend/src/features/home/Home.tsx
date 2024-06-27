@@ -14,7 +14,7 @@ export function Home() {
 
   return (
     <div className="h-full">
-      <div className="row px-8">
+      <div className="px-8">
         <div>
           <PostForm />
           <hr />

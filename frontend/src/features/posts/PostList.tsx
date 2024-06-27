@@ -7,16 +7,10 @@ type PostListProps = {
 
 export const PostList = ({ posts }: PostListProps) => {
   return (
-    <div className="w-full mt-4 py-4">
+    <div className="w-3/4 p-4">
       {posts &&
         posts.map((post: Post, index: number) => (
-          <PostCard
-            key={index}
-            title={post.Title}
-            content={post.Body}
-            date={post.CreatedAt}
-            postId={post.id}
-          />
+          <PostCard key={index} post={post} />
         ))}
     </div>
   );

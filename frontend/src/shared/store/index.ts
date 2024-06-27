@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import helloReducer, { helloSlice } from "./HelloSlice";
 import postReducer, { postSlice } from "./PostsSlice";
 import postDetailReducer, { postDetailSlice } from "./PostDetailSlice";
+import searchPostReducer, { searchPostSlice } from "./searchPostsSlice";
 import signinReducer, { signinSlice } from "./SigninSlice";
 
 export const store = configureStore({
@@ -10,6 +11,7 @@ export const store = configureStore({
     hello: helloReducer,
     post: postReducer,
     detail: postDetailReducer,
+    searchPostList: searchPostReducer,
     singin: signinReducer,
   },
 });
@@ -18,6 +20,7 @@ export const actions = {
   ...helloSlice.actions,
   ...postSlice.actions,
   ...postDetailSlice.actions,
+  ...searchPostSlice.actions,
   ...signinSlice.actions,
 };
 

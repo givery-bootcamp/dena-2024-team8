@@ -1,14 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PostList } from "../posts";
+import { useAppSelector, useAppDispatch } from "../../shared/hooks";
+import { APIService } from "../../shared/services";
 
 export const SearchRouter = () => {
+  const { posts } = useAppSelector((state) => state.searchPostList);
+  const dispatch = useAppDispatch();
+
   const [query, setQuery] = useState("");
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    console.log(query);
-    // onSearch(query);
+    dispatch(APIService.getSearchPostList(query));
   };
+
+  useEffect(() => {
+    dispatch(APIService.getSearchPostList(query));
+  }, [dispatch]);
 
   return (
     <div className="pl-8 space-y-4">
@@ -31,7 +39,7 @@ export const SearchRouter = () => {
         </button>
       </form>
       <hr />
-      <PostList />
+      {posts && <PostList posts={posts!} />}
     </div>
   );
 };

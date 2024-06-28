@@ -152,7 +152,9 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t  $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/dena-training-2024-team-8-elasticsearch:latest  - <<EOF FROM docker.elastic.co/elasticsearch/elasticsearch:8.14.1 EOF
+          docker build -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/dena-training-2024-team-8-elasticsearch:latest - <<EOF
+          FROM docker.elastic.co/elasticsearch/elasticsearch:8.14.1
+          EOF
 
       - name: Push Docker image to ECR
         run: |

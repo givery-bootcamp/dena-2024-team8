@@ -4,6 +4,7 @@ import { Home } from "../features/home";
 import { Post } from "../features/posts/Post";
 import { Signin } from "../features/signin";
 import { RequiredAuth } from "../components/RequiredAuth";
+import { SearchRouter } from "../features/search/SearchRouter";
 
 export const AppRoute = () => {
   return (
@@ -11,7 +12,7 @@ export const AppRoute = () => {
       <Route element={<RequiredAuth />}>
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/search" element={<Home />} />
+          <Route path="/search" element={<SearchRouter />} />
           <Route path="/posts/:postId" element = {<Post />}/>
         </Route>
       </Route>

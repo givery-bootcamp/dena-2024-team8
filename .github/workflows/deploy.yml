@@ -1,9 +1,15 @@
 name: Deploy
 
 on:
-  push:
+  pull_request:
     branches:
-      - 'main'
+      - main
+    paths:
+      - "backend/**"
+      - "frontend/**"
+  # push:
+  #   branches:
+  #     - 'main'
 
 # 環境変数を設定
 env:
@@ -79,6 +85,11 @@ jobs:
     needs: [backend-build]
     # deployブランチにpushされた時のみ実行
     # if: github.ref == 'refs/heads/deploy'
+
+    env:
+      JWT_SECRET: "jwt-secret"
+      DB_USER: "admin"
+      DB_PASSWORD: "dena-training-2024-team-8"
 
     steps:
     - name: Download backend build artifacts

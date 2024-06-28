@@ -15,13 +15,13 @@ type PostRepository struct {
 
 type Post struct {
 	Id        int       `json:"id"`
-	UserId    int       `json:user_id`
-	User      User      `gorm:"foreignKey:UserId" json:user`
-	Title     string    `json:title`
-	Body      string    `json:body`
-	CreatedAt time.Time `json:created_at`
-	UpdatedAt time.Time `json:update_at`
-	DeletedAt time.Time `json:deleted_at`
+	UserId    int       `json:"user_id"`
+	User      User      `gorm:"foreignKey:UserId" json:"user"`
+	Title     string    `json:"title"`
+	Body      string    `json:"body"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"update_at"`
+	DeletedAt time.Time `json:"deleted_at"`
 }
 
 func NewPostRepository(conn *gorm.DB) *PostRepository {
@@ -91,6 +91,17 @@ func (r *PostRepository) Update(title, body string, userId, postId int) (*entiti
 	post.User = user
 
 	return convertPostRepositoryModelToEntity(&post, &user), nil
+}
+
+func (r *PostRepository) Delete(id int) error {
+	result := r.Conn.Delete(&Post{}, id)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return errors.New("not found")
+	}
+	return nil
 }
 
 func (r *PostRepository) List(id *int, limit int, offset int) ([]*entities.Post, error) {

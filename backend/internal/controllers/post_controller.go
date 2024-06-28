@@ -1,11 +1,17 @@
 package controllers
 
 import (
+	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"myapp/internal/entities"
+	"myapp/internal/external"
 	"myapp/internal/repositories"
 	"myapp/internal/usecases"
+	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -57,6 +63,84 @@ func PostList(ctx *gin.Context) {
 		}
 		ctx.JSON(200, result)
 	}
+}
+
+func PostSearch(c *gin.Context) {
+	query := c.Query("q")
+
+	var searchQuery string
+	if query == "" {
+		// Query is empty, search for all documents
+		searchQuery = `{
+			"query": {
+				"match_all": {}
+			}
+		}`
+	} else {
+		searchQuery = fmt.Sprintf(`{
+			"query": {
+				"multi_match": {
+					"query": "%s",
+					"fields": ["title", "body"]
+				}
+			}
+		}`, query)
+	}
+
+	var buf strings.Builder
+	buf.WriteString(searchQuery)
+
+	res, err := external.ES.Search(
+		external.ES.Search.WithContext(context.Background()),
+		external.ES.Search.WithIndex("posts"),
+		external.ES.Search.WithBody(strings.NewReader(buf.String())),
+		external.ES.Search.WithTrackTotalHits(true),
+		external.ES.Search.WithPretty(),
+	)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+	defer res.Body.Close()
+
+	if res.IsError() {
+		var e map[string]interface{}
+		if err := json.NewDecoder(res.Body).Decode(&e); err != nil {
+			c.JSON(500, gin.H{"error": fmt.Sprintf("Error parsing the response body: %s", err)})
+			return
+		} else {
+			c.JSON(500, gin.H{"error": fmt.Sprintf("Error: %s: %s", res.Status(), e["error"].(map[string]interface{})["reason"])})
+			return
+		}
+	}
+
+	var r map[string]interface{}
+	if err := json.NewDecoder(res.Body).Decode(&r); err != nil {
+		c.JSON(500, gin.H{"error": fmt.Sprintf("Error parsing the response body: %s", err)})
+		return
+	}
+
+	posts := make([]Post, 0)
+
+	hits, ok := r["hits"].(map[string]interface{})
+	if !ok || hits["hits"] == nil {
+		// No hits found, handle empty result case
+		c.JSON(200, posts)
+		return
+	}
+
+	for _, hit := range hits["hits"].([]interface{}) {
+		source := hit.(map[string]interface{})["_source"].(map[string]interface{})
+		id, _ := source["id"].(float64) // Type assertion with fallback
+		post := Post{
+			Id:    int(id),
+			Title: source["title"].(string),
+			Body:  source["body"].(string),
+		}
+		posts = append(posts, post)
+	}
+
+	c.JSON(200, posts)
 }
 
 // PostDetail godoc
@@ -205,5 +289,48 @@ func PostUpdate(ctx *gin.Context) {
 		handleError(ctx, 400, errors.New("you are not the author of this post"))
 	} else {
 		ctx.JSON(200, result)
+	}
+}
+
+// PostDelete godoc
+// @Summary delete post by id
+// @Description delete post by id
+// @ID delete-post-by-id
+// @Tags post
+// @Accept  json
+// @Produce  json
+// @Param postId path int true "Post ID デフォルトで1から2までしかデータがありません。"
+// @Success 200
+// @Failure 400 {object} ErrorResponse "不正なpostID"
+// @Failure 404 {object} ErrorResponse "ポストが見つからない"
+// @Failure 500 {object} ErrorResponse "Internal Server Error"
+// @Router /posts/{postId} [delete]
+func PostDelete(ctx *gin.Context) {
+	userId := ctx.GetInt("userId")
+	sid := ctx.Param("postId")
+	id, err := strconv.Atoi(sid)
+	if err != nil {
+		handleError(ctx, 500, err)
+	}
+
+	repository := repositories.NewPostRepository(DB(ctx))
+	usecase := usecases.NewPostUsecase(repository)
+
+	// 投稿者が異なる場合は更新しない
+	post, err := usecase.Get(id)
+	if err != nil {
+		handleError(ctx, 500, err)
+	}
+	if post.UserId != userId {
+		handleError(ctx, 400, errors.New("you are not the author of this post"))
+		return
+	}
+
+	// 削除
+	err = usecase.Delete(id)
+	if err != nil {
+		handleError(ctx, 500, err)
+	} else {
+		ctx.Status(http.StatusOK)
 	}
 }

@@ -7,12 +7,16 @@ export default function PostForm() {
   const [contents,setContens] = useState(""); // 投稿内容
   const dispatch = useAppDispatch();
   const title = "hoge";
-  const { postList } = useAppSelector((state) => state.post);
 
+  const resetText = () =>{
+    setContens("");
+  }
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     dispatch(APIService.createPost({title,contents}))
+      .then(()=>{dispatch(APIService.getPostList())});
+    resetText();
   };
 
   useEffect(()=>{
@@ -30,6 +34,7 @@ export default function PostForm() {
       <textarea
         className="form-control border rounded py-2 px-3 w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="TweetFormTextarea"
+        value = {contents}
         placeholder="今の気持ちは？？"
         onChange={(e) => setContens(e.target.value)}
       ></textarea>
@@ -37,7 +42,7 @@ export default function PostForm() {
         type="submit"
         className="mt-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       >
-        Button
+        Tweet
       </button>
     </form>
   );

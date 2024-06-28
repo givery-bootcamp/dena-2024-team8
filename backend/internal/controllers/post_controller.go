@@ -49,7 +49,7 @@ func PostList(ctx *gin.Context) {
 
 	repository := repositories.NewPostRepository(DB(ctx))
 	usecase := usecases.NewPostUsecase(repository)
-	result, err := usecase.GetList(limit, offset)
+	result, err := usecase.GetList(2^63-1, 0)
 	if err != nil {
 		handleError(ctx, 500, err)
 	}
@@ -70,6 +70,16 @@ func PostList(ctx *gin.Context) {
 					if post.Id == id {
 						filtered = append(filtered, post)
 					}
+				}
+			}
+			// set limit and offset
+			if limit > 0 {
+				if offset > len(filtered) {
+					filtered = []*entities.Post{}
+				} else if offset+limit < len(filtered) {
+					filtered = filtered[offset : offset+limit]
+				} else {
+					filtered = filtered[offset:]
 				}
 			}
 			ctx.JSON(200, filtered)

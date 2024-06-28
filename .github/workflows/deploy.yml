@@ -82,7 +82,7 @@ jobs:
   # ECR(elastic container registry)にpushする
   backend-ecr-push:
     runs-on: ubuntu-latest
-    needs: [backend-build]
+    needs: [backend-build, elasticsearch-ecr-push]
     # deployブランチにpushされた時のみ実行
     # if: github.ref == 'refs/heads/deploy'
 
@@ -131,8 +131,7 @@ jobs:
         aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment
 
 
-  # elasticsearchのdeploy
-  # elasticsearch-ecr-pushを使用する場合はこちらはコメントアウトする
+  # elasticsearchのpush
   elasticsearch-ecr-push:
     runs-on: ubuntu-latest
 
@@ -162,22 +161,22 @@ jobs:
           ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
           docker push $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/dena-training-2024-team-8-elasticsearch:latest
 
-  # elasticsearchのdeploy
-  elasticsearch-deploy:
-    runs-on: ubuntu-latest
-    needs: [elasticsearch-ecr-push]
+  # # elasticsearchのdeploy
+  # elasticsearch-deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: [elasticsearch-ecr-push]
 
-    steps:
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: ${{ env.AWS_REGION }}
-          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+  #   steps:
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         aws-region: ${{ env.AWS_REGION }}
+  #         aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
 
-      - name: Update ECS service to force new deployment
-        run: |
-          aws ecs update-service --cluster $ECS_CLUSTER --service dena-training-2024-team-8-elasticsearch --force-new-deployment
+  #     - name: Update ECS service to force new deployment
+  #       run: |
+  #         aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment
 
   # frontendのdeploy(s3へのpush)
   # frontend-ecr-pushを使用する場合はこちらはコメントアウトする

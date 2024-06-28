@@ -8,7 +8,6 @@ export const Sidebar = () => {
 
   useEffect(() => {
     setActivePath(location.pathname);
-    console.log(location.pathname);
   }, [location]);
 
   return (

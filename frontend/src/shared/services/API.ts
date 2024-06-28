@@ -26,6 +26,22 @@ export const getPostDetail = createAsyncThunk<Post, string>(
   }
 );
 
+export const deletePost = createAsyncThunk<Post, number>(
+  "deletePost",
+  async (postId: number) => {
+    let response = {}
+    try {
+      response = await fetch(`${API_ENDPOINT_PATH}/posts/${postId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    return {} as Post
+  }
+);
+
 export const signin = createAsyncThunk<
   User,
   { username: string; password: string }

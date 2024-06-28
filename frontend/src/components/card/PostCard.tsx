@@ -1,13 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 type PostCardProps = {
   title: string;
   content: string;
   date: string;
-  postId: number;
-};
+  postId : number;
+}
 
-export const PostCard = ({ title, content, date, postId }: PostCardProps) => {
+export const PostCard = ({ title, content, date ,postId}: PostCardProps) => {
   return (
     <Link to={`/posts/${postId}`}>
       <div className="border p-4 mb-4 rounded shadow-sm">

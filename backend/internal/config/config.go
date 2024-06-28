@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 )
@@ -43,4 +44,14 @@ func init() {
 	if v := os.Getenv("JWT_SECRET"); v != "" {
 		JwtSecret = v
 	}
+	//環境変数を確認
+	fmt.Println("HOSTNAME: ", HostName)
+	fmt.Println("PORT: ", Port)
+	fmt.Println("CORS_ALLOW_ORIGIN: ", CorsAllowOrigin)
+	fmt.Println("DB_HOSTNAME: ", DBHostName)
+	fmt.Println("DB_PORT: ", DBPort)
+	fmt.Println("DB_NAME: ", DBName)
+	fmt.Println("DB_USER: ", DBUser)
+	fmt.Println("DB_PASSWORD: ", DBPassword)
+	fmt.Println("JWT_SECRET: ", JwtSecret)
 }

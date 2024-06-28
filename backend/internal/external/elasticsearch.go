@@ -20,11 +20,13 @@ func InitElasticSearch() {
 			"http://elasticsearch:9200",
 		},
 	}
+    log.Println("InitElasticSearch", cfg)
 	var err error
 	ES, err = elasticsearch.NewClient(cfg)
 	if err != nil {
 		log.Fatalf("Error creating the client: %s", err)
 	}
+    log.Println("InitElasticSearch", ES)
 	syncDataToElasticSearch()
 }
 
@@ -51,15 +53,17 @@ func syncDataToElasticSearch() {
 			Body:       strings.NewReader(string(postJson)),
 			Refresh:    "true",
 		}
+        log.Println("syncDataToElasticSearch request", req)
 
 		res, err := req.Do(context.Background(), ES)
 		if err != nil {
 			log.Fatalf("Error indexing document ID=%d: %s", post.Id, err)
 		}
+        log.Println("syncDataToElasticSearch response", res)
 		defer res.Body.Close()
 
 		if res.IsError() {
-			log.Printf("Error indexing document ID=%d: %s", post.Id, res.String())
+			log.Printf("response Error indexing document ID=%d: %s", post.Id, res.String())
 		} else {
 			log.Printf("Successfully indexed document ID=%d", post.Id)
 		}

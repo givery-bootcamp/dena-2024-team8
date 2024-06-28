@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { MainLayout } from "./MainLayout";
 import { Home } from "../features/home";
-import { Post } from "../features/posts/Post";
+import { PostDetailRouter } from "../features/posts/PostDetailRouter";
 import { Signin } from "../features/signin";
 import { RequiredAuth } from "../components/RequiredAuth";
 import { SearchRouter } from "../features/search/SearchRouter";
@@ -15,8 +15,8 @@ export const AppRoute = () => {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<SearchRouter />} />
-          <Route path="/posts/:postId" element={<Post />} />
           <Route path="/posts/:postId/edit" element={<UpdatePost />} />
+          <Route path="/posts/:postId" element={<PostDetailRouter />} />
           <Route path="/posts/new" element={<CreatePost />} />
         </Route>
       </Route>

@@ -9,6 +9,35 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func CommentList(ctx *gin.Context) {
+	postId, err := strconv.Atoi(ctx.Param("postId"))
+	if err != nil {
+		handleError(ctx, 400, err)
+		return
+	}
+
+	offset, err := strconv.Atoi(ctx.DefaultQuery("offset", "0"))
+	if err != nil {
+		handleError(ctx, 400, err)
+		return
+	}
+
+	limit, err := strconv.Atoi(ctx.DefaultQuery("limit", "100"))
+	if err != nil {
+		handleError(ctx, 400, err)
+		return
+	}
+
+	repository := repositories.NewCommentRepository(DB(ctx))
+	usecase := usecases.NewCommentUsecase(repository)
+	result, err := usecase.List(postId, limit, offset)
+	if err != nil {
+		handleError(ctx, 400, err)
+		return
+	}
+	ctx.JSON(200, result)
+}
+
 func CommentCreate(ctx *gin.Context) {
 	postId, err := strconv.Atoi(ctx.PostForm("postId"))
 	if err != nil {

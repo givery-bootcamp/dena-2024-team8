@@ -45,11 +45,41 @@ func syncDataToElasticSearch() {
 			log.Fatalf("Error marshaling post ID=%d: %s", post.Id, err)
 		}
 
-		SendCreateRequest("posts", fmt.Sprintf("%d", post.Id), "true", postJson)
+		sendCreateRequest("posts", fmt.Sprintf("%d", post.Id), "true", postJson)
 	}
 }
 
-func SendCreateRequest(index, documentID, refresh string, body []byte) {
+func SendCreatePostRequest(post entities.Post) {
+	postJson, err := json.Marshal(map[string]string{
+		"id":    fmt.Sprintf("%d", post.Id),
+		"title": post.Title,
+		"body":  post.Body,
+	})
+	if err != nil {
+		log.Fatalf("Error marshaling post ID=%d: %s", post.Id, err)
+	}
+
+	sendCreateRequest("posts", fmt.Sprintf("%d", post.Id), "true", postJson)
+}
+
+func SendUpdatePostRequest(post entities.Post) {
+	postJson, err := json.Marshal(map[string]string{
+		"id":    fmt.Sprintf("%d", post.Id),
+		"title": post.Title,
+		"body":  post.Body,
+	})
+	if err != nil {
+		log.Fatalf("Error marshaling post ID=%d: %s", post.Id, err)
+	}
+
+	sendUpdateRequest("posts", fmt.Sprintf("%d", post.Id), "true", postJson)
+}
+
+func SendDeletePostRequest(id int) {
+	sendDeleteRequest("posts", fmt.Sprintf("%d", id), "true")
+}
+
+func sendCreateRequest(index, documentID, refresh string, body []byte) {
 	req := esapi.IndexRequest{
 		Index:      index,
 		DocumentID: documentID,
@@ -70,8 +100,8 @@ func SendCreateRequest(index, documentID, refresh string, body []byte) {
 	}
 }
 
-func SendUpdateRequest(index, documentID, refresh string, body []byte) {
-	req := esapi.UpdateRequest{
+func sendUpdateRequest(index, documentID, refresh string, body []byte) {
+	req := esapi.IndexRequest{
 		Index:      index,
 		DocumentID: documentID,
 		Body:       strings.NewReader(string(body)),
@@ -91,7 +121,7 @@ func SendUpdateRequest(index, documentID, refresh string, body []byte) {
 	}
 }
 
-func SendDeleteRequest(index, documentID, refresh string) {
+func sendDeleteRequest(index, documentID, refresh string) {
 	req := esapi.DeleteRequest{
 		Index:      index,
 		DocumentID: documentID,

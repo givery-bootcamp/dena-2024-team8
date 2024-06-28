@@ -33,15 +33,42 @@ func (u *PostUsecase) Get(id int) (*entities.Post, error) {
 }
 
 func (u *PostUsecase) Create(title, body string, userId int) (*entities.Post, error) {
-	return u.repository.Create(title, body, userId)
+	// return u.repository.Create(title, body, userId)
+	post, err := u.repository.Create(title, body, userId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	external.SendCreatePostRequest(*post)
+	return post, nil
 }
 
 func (u *PostUsecase) Update(title, body string, userId, postId int) (*entities.Post, error) {
-	return u.repository.Update(title, body, userId, postId)
+	post, err := u.repository.Update(title, body, userId, postId)
+	fmt.Println(post, err)
+
+	// 両方 nil の場合は、ユーザーが異なるため更新しない
+	if post == nil {
+		return nil, err
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	external.SendUpdatePostRequest(*post)
+	return post, nil
 }
 
 func (u *PostUsecase) Delete(id int) error {
-	return u.repository.Delete(id)
+	err := u.repository.Delete(id)
+
+	if err != nil {
+		return err
+	}
+
+	external.SendDeletePostRequest(id)
+	return nil
 }
 
 func (u *PostUsecase) Search(query string) ([]int, error) {
@@ -107,8 +134,9 @@ func (u *PostUsecase) Search(query string) ([]int, error) {
 
 	for _, hit := range hits["hits"].([]interface{}) {
 		source := hit.(map[string]interface{})["_source"].(map[string]interface{})
-		fmt.Printf("source: %v\n", source["id"])
+		fmt.Printf("source: %v\n", source)
 		id, _ := source["id"].(string) // Type assertion with fallback
+		fmt.Println("id: ", id)
 		intId, err := strconv.Atoi(id)
 		if err != nil {
 			log.Printf("Error parsing id: %v", err)
@@ -116,6 +144,8 @@ func (u *PostUsecase) Search(query string) ([]int, error) {
 		}
 		postsIds = append(postsIds, intId)
 	}
+
+	fmt.Println(postsIds)
 
 	return postsIds, nil
 }

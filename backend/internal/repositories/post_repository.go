@@ -64,6 +64,7 @@ func (r *PostRepository) Create(title, body string, userId int) (*entities.Post,
 func (r *PostRepository) Update(title, body string, userId, postId int) (*entities.Post, error) {
 	var post Post
 	result := r.Conn.First(&post, postId)
+	post.DeletedAt = time.Date(9998, 12, 31, 23, 59, 59, 0, time.UTC)
 	if result.Error != nil {
 		return nil, result.Error
 	}

@@ -306,6 +306,7 @@ func PostUpdate(ctx *gin.Context) {
 // @Failure 500 {object} ErrorResponse "Internal Server Error"
 // @Router /posts/{postId} [delete]
 func PostDelete(ctx *gin.Context) {
+	userId := ctx.GetInt("userId")
 	sid := ctx.Param("postId")
 	id, err := strconv.Atoi(sid)
 	if err != nil {
@@ -314,6 +315,18 @@ func PostDelete(ctx *gin.Context) {
 
 	repository := repositories.NewPostRepository(DB(ctx))
 	usecase := usecases.NewPostUsecase(repository)
+
+	// 投稿者が異なる場合は更新しない
+	post, err := usecase.Get(id)
+	if err != nil {
+		handleError(ctx, 500, err)
+	}
+	if post.UserId != userId {
+		handleError(ctx, 400, errors.New("you are not the author of this post"))
+		return
+	}
+
+	// 削除
 	err = usecase.Delete(id)
 	if err != nil {
 		handleError(ctx, 500, err)

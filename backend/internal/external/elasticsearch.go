@@ -17,7 +17,7 @@ var ES *elasticsearch.Client
 func InitElasticSearch() {
 	cfg := elasticsearch.Config{
 		Addresses: []string{
-			"http://localhost:9200",
+			"http://127.0.0.1:9200",
 		},
 	}
     log.Println("InitElasticSearch", cfg)

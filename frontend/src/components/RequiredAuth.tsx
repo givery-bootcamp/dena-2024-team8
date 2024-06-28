@@ -25,8 +25,6 @@ export const RequiredAuth = () => {
       console.log("user is undefined");
     } else if (error !== undefined) {
       navigator("/signin");
-    } else {
-      navigator("/");
     }
   }, [user, error, navigator]);
 

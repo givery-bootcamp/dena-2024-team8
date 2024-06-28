@@ -40,6 +40,10 @@ func (u *PostUsecase) Update(title, body string, userId, postId int) (*entities.
 	return u.repository.Update(title, body, userId, postId)
 }
 
+func (u *PostUsecase) Delete(id int) error {
+	return u.repository.Delete(id)
+}
+
 func (u *PostUsecase) Search(query string) ([]int, error) {
 	var searchQuery string
 	if query == "" {

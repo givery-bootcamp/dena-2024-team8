@@ -16,7 +16,7 @@ export const SearchRouter = () => {
 
   useEffect(() => {
     dispatch(APIService.getSearchPostList(query));
-  }, [dispatch]);
+  }, [dispatch, query]);
 
   return (
     <div className="pl-8 space-y-4">
@@ -39,7 +39,7 @@ export const SearchRouter = () => {
         </button>
       </form>
       <hr />
-      {posts && <PostList posts={posts!} />}
+      {posts && <PostList posts={posts} />}
     </div>
   );
 };

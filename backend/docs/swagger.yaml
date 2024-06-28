@@ -94,6 +94,37 @@ paths:
       tags:
       - post
   /posts/{postId}:
+    delete:
+      consumes:
+      - application/json
+      description: delete post by id
+      operationId: delete-post-by-id
+      parameters:
+      - description: Post ID デフォルトで1から2までしかデータがありません。
+        in: path
+        name: postId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: 不正なpostID
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "404":
+          description: ポストが見つからない
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: delete post by id
+      tags:
+      - post
     get:
       consumes:
       - application/json

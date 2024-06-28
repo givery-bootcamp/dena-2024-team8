@@ -118,6 +118,15 @@ jobs:
 
         docker build -f docker/backend-ci.Dockerfile -t $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$REPOSITORY_NAME_BACKEND:$IMAGE_TAG .
         docker push $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$REPOSITORY_NAME_BACKEND:$IMAGE_TAG
+
+    - name: Update task definition
+      id: task-def
+      run: |
+        TASK_DEFINITION=$(aws ecs describe-task-definition --task-definition ${{ env.ECS_SERVICE }}-task-def)
+        NEW_TASK_DEF=$(echo $TASK_DEFINITION | jq --arg JWT_SECRET "$JWT_SECRET" --arg DB_USER "$DB_USER" --arg DB_PASSWORD "$DB_PASSWORD" '.taskDefinition | .containerDefinitions[0].environment += [{"name": "JWT_SECRET", "value": $JWT_SECRET}, {"name": "DB_USER", "value": $DB_USER}, {"name": "DB_PASSWORD", "value": $DB_PASSWORD}]')
+        echo $NEW_TASK_DEF > new-task-def.json
+        aws ecs register-task-definition --cli-input-json file://new-task-def.json
+
   # frontend-ecr-pushを使用する場合はそちらでupdateするのでこちらはコメントアウトする
   # このコードは、AWSのECS（Elastic Container Service）サービスのデプロイを更新するためのステップです。具体的には、aws ecs update-serviceコマンドを使用して、指定されたECSクラスタとサービスに対して新しいデプロイを強制的に実行します。
   # このコードは、YAML形式で書かれており、- nameフィールドでステップの名前が指定されています。この場合、ステップの名前は「Update ECS service to force new deployment」となっています。

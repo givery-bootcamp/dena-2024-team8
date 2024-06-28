@@ -17,6 +17,7 @@ pre-commit:
   commands:
       format-frontend:
         run: cd frontend && npm run format && npm run lint
+        stage_fixed: true
 #     eslint:
 #       glob: "*.{js,ts,jsx,tsx}"
 #       run: yarn eslint {staged_files}

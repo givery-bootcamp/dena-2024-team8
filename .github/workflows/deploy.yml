@@ -130,9 +130,8 @@ jobs:
       run: |
         aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment
 
-
   # elasticsearchのpush
-  elasticsearch-ecr-push:
+  elasticsearch-ecr-build-and-push:
     runs-on: ubuntu-latest
 
     steps:
@@ -161,22 +160,6 @@ jobs:
           ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
           docker push $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/dena-training-2024-team-8-elasticsearch:latest
 
-  # # elasticsearchのdeploy
-  # elasticsearch-deploy:
-  #   runs-on: ubuntu-latest
-  #   needs: [elasticsearch-ecr-push]
-
-  #   steps:
-  #     - name: Configure AWS credentials
-  #       uses: aws-actions/configure-aws-credentials@v4
-  #       with:
-  #         aws-region: ${{ env.AWS_REGION }}
-  #         aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-  #         aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-
-  #     - name: Update ECS service to force new deployment
-  #       run: |
-  #         aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment
 
   # frontendのdeploy(s3へのpush)
   # frontend-ecr-pushを使用する場合はこちらはコメントアウトする

@@ -64,6 +64,30 @@ export const signout = createAsyncThunk<SignOutResponse>(
   }
 );
 
+export const createPost = createAsyncThunk<
+  Post,
+  { title: string, contents: string }
+  >("createPost", async ({ title, contents }) => {
+    const body = {
+      title: title,
+      body: contents,
+    };
+  const response = await fetch(`${API_ENDPOINT_PATH}/posts`, {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: new URLSearchParams({
+      title: title,
+      body: contents
+    }),
+    credentials: "include",
+  });
+
+  console.log("title=" + title + "&body=" + contents)
+  return await response.json();
+});
+
 export const getSearchPostList = createAsyncThunk<PostList, string>(
   "getSearchPost",
   async (query) => {

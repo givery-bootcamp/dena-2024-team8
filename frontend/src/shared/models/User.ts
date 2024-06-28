@@ -8,3 +8,7 @@ export interface User {
     updated_at: string;
     deleted_at: string;
     }
+
+export interface SignOutResponse {
+    message: string;
+}

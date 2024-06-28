@@ -76,7 +76,7 @@ services:
     networks:
       - esnet
     healthcheck:
-      test: ["CMD-SHELL", "curl -fsSL http://localhost:9200/_cat/health | grep -q 'yellow' || grep -q 'green'"]
+      test: ["CMD-SHELL", "curl -fsSL http://localhost:9200/_cat/health | grep -e green -e yellow"]
       interval: 10s
       timeout: 5s
       retries: 5

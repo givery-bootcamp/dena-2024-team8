@@ -93,6 +93,17 @@ func (r *PostRepository) Update(title, body string, userId, postId int) (*entiti
 	return convertPostRepositoryModelToEntity(&post, &user), nil
 }
 
+func (r *PostRepository) Delete(id int) error {
+	result := r.Conn.Delete(&Post{}, id)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return errors.New("not found")
+	}
+	return nil
+}
+
 func (r *PostRepository) List(id *int, limit int, offset int) ([]*entities.Post, error) {
 	var obj []Post
 	var result *gorm.DB

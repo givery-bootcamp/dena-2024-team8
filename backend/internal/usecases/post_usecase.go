@@ -31,3 +31,7 @@ func (u *PostUsecase) Create(title, body string, userId int) (*entities.Post, er
 func (u *PostUsecase) Update(title, body string, userId, postId int) (*entities.Post, error) {
 	return u.repository.Update(title, body, userId, postId)
 }
+
+func (u *PostUsecase) Delete(id int) error {
+	return u.repository.Delete(id)
+}

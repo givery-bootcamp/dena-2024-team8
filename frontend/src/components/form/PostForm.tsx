@@ -3,25 +3,28 @@ import { APIService } from "../../shared/services";
 import { useAppDispatch } from "../../shared/hooks";
 
 export default function PostForm() {
-  const [postContent,setPostContent] = useState(""); // 投稿内容
+  const [postContent, setPostContent] = useState(""); // 投稿内容
   const dispatch = useAppDispatch();
   const title = "hoge";
 
-  const resetText = () =>{
+  const resetText = () => {
     setPostContent("");
-  }
+  };
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    dispatch(APIService.createPost({title,content: postContent}))
-      .then(()=>{dispatch(APIService.getPostList())});
+    dispatch(APIService.createPost({ title, content: postContent })).then(
+      () => {
+        dispatch(APIService.getPostList());
+      },
+    );
     resetText();
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(postContent);
-  },[postContent]);
-  
+  }, [postContent]);
+
   return (
     <form className="mb-3" onSubmit={handleSubmit}>
       <label
@@ -33,7 +36,7 @@ export default function PostForm() {
       <textarea
         className="form-control border rounded py-2 px-3 w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="TweetFormTextarea"
-        value = {postContent}
+        value={postContent}
         placeholder="今の気持ちは？？"
         onChange={(e) => setPostContent(e.target.value)}
       ></textarea>

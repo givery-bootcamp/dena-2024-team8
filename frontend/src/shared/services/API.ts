@@ -66,16 +66,16 @@ export const signout = createAsyncThunk<SignOutResponse>(
 
 export const createPost = createAsyncThunk<
   Post,
-  { title: string, content: string }
-  >("createPost", async ({ title, content: content }) => {
+  { title: string; content: string }
+>("createPost", async ({ title, content: content }) => {
   const response = await fetch(`${API_ENDPOINT_PATH}/posts`, {
     method: "POST",
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
+      "Content-Type": "application/x-www-form-urlencoded",
     },
     body: new URLSearchParams({
       title: title,
-      body: content
+      body: content,
     }),
     credentials: "include",
   });
@@ -89,3 +89,14 @@ export const getSearchPostList = createAsyncThunk<PostList, string>(
     return await response.json();
   },
 );
+
+export const getUser = createAsyncThunk<User>("getUser", async () => {
+  const response = await fetch(`${API_ENDPOINT_PATH}/auth/user`, {
+    method: "GET",
+    credentials: "include",
+  });
+  if (response.status != 200) {
+    throw new Error("ユーザー情報の取得に失敗しました。");
+  }
+  return await response.json();
+});

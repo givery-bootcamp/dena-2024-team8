@@ -1,10 +1,9 @@
-import PostForm from "../../components/form/PostForm"
+import PostForm from "../../components/form/PostForm";
 
-export const CreatePost = () =>{
-
-    return (
-        <div>
-            <PostForm />
-        </div>
-    )
-}
+export const CreatePost = () => {
+  return (
+    <div>
+      <PostForm />
+    </div>
+  );
+};

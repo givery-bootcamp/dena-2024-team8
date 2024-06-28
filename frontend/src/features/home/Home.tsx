@@ -18,7 +18,7 @@ export function Home() {
         <div>
           <PostForm />
           <hr />
-          <PostList posts={postList!} />
+          <PostList posts={postList ?? []} />
         </div>
       </div>
     </div>

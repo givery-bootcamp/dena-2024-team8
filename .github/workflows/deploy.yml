@@ -4,13 +4,10 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - "backend/**"
-      - "frontend/**"
   # push:
   #   branches:
   #     - 'main'
-
+  
 # 環境変数を設定
 env:
   AWS_REGION: ap-northeast-1

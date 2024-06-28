@@ -130,6 +130,37 @@ jobs:
       run: |
         aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment
 
+  #elastic searchのdeploy
+  elastic-search-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: ${{ env.AWS_REGION }}
+        aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+
+    - name: Log in to Amazon ECR
+      uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build Docker image
+        run: |
+          docker build -t  $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/
+dena-training-2024-team-8-elasticsearch:latest  - <<EOF
+          FROM docker.elastic.co/elasticsearch/elasticsearch:8.14.1
+          EOF
+
+      - name: Push Docker image to ECR
+        run: |
+          docker push  $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/
+dena-training-2024-team-8-elasticsearch:latest
+
+
   # frontendのdeploy(s3へのpush)
   # frontend-ecr-pushを使用する場合はこちらはコメントアウトする
   frontend-s3-push:

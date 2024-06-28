@@ -130,8 +130,10 @@ jobs:
       run: |
         aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment
 
-  #elastic searchのdeploy
-  elastic-search-deploy:
+
+  # elasticsearchのdeploy
+  # elasticsearch-ecr-pushを使用する場合はこちらはコメントアウトする
+  elasticsearch-ecr-push:
     runs-on: ubuntu-latest
 
     steps:

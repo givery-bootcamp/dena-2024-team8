@@ -17,7 +17,6 @@ export const Header = () => {
         // userにあたいが入っているかどうかを判定する
         if (user === undefined) {
           setIsLogin(false);
-          navigator('/signin');
         }
         setIsLogin(true);
       } catch (error) {

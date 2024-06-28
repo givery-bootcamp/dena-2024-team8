@@ -13,19 +13,23 @@ export const RequiredAuth = () => {
         const fetchData = async () => {
             try {
                 await dispatch(APIService.getUser())
-                console.log("user:", user);
-                console.log("error:", error);
-                if (user === undefined) {
-                    navigator('/signin');
-                } else {
-                    navigator('/');
-                }
             } catch (error) {
                 console.log("Error fetching user:", error);
             }
         };
         fetchData();
-    }, [dispatch, error]);
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (user === undefined && error === undefined) {
+            console.log("user is undefined");
+        } else if (error !== undefined) {
+            navigator('/signin');
+        } else {
+            navigator('/');
+        }
+    }, [user, error, navigator]);
+
     return (
         <Outlet />
     );

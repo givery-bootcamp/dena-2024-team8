@@ -8,12 +8,23 @@ export const Header = () => {
   const navigator = useNavigate();
   const dispatch = useAppDispatch();
   const { user, error } = useAppSelector((state) => state.user);
+  const [isLogin, setIsLogin] = useState(false);
   // ユーザーがログインしているかどうかを判定する
   useEffect(() => {
-    dispatch(APIService.getUser())
-    if (error) {
-      navigator('/signin');
-    }
+    const fetchData = async () => {
+      try {
+        await APIService.getUser();
+        // userにあたいが入っているかどうかを判定する
+        if (user === undefined) {
+          setIsLogin(false);
+          navigator('/signin');
+        }
+        setIsLogin(true);
+      } catch (error) {
+        console.log("Error fetching user:", error);
+      }
+    };
+    fetchData();
   }, [dispatch, user, error]);
   
   return (
@@ -34,10 +45,11 @@ export const Header = () => {
         </div>
 
         <div className="lg:flex lg:flex-1 lg:justify-end">
-          { error ? 
+          { isLogin ? 
+          <SignoutButton /> :
             <button onClick={() => {navigator('/signin')}} className="lg:justify-end bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Login
-          </button> :<SignoutButton />
+          </button>
           }
         </div>
       </nav>

@@ -19,7 +19,6 @@ export function Signin() {
                 // responseからデータを取得し、ログイン成功の処理を行う
                 if (response.payload && response.payload) {
                     // homeに遷移
-                    console.log("Signin success");
                     navigate('/');
                 } else {
                     // データが存在しない場合の処理をここに記述

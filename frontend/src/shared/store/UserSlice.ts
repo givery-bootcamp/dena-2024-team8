@@ -17,9 +17,12 @@ export const userSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(APIService.getUser.fulfilled, (state, action) => {
             state.user = action.payload;
+            state.error = undefined;
         });
         builder.addCase(APIService.getUser.rejected, (state, action) => {
             state.error = action.error.message;
+            state.user = undefined;
+            console.log("error", action.error.message);
         });
     },
 });

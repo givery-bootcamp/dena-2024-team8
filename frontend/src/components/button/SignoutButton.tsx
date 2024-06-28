@@ -1,11 +1,14 @@
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../shared/hooks';
 import { APIService } from '../../shared/services';
 
 export default function SignoutButton() {
     const dispatch = useAppDispatch();
+    const navigator = useNavigate();
 
     const handleSignOut = () => {
         dispatch(APIService.signout())
+        navigator('/signin');
     }
     return (
         <button

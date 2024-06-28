@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector} from "../shared/hooks";
 import { APIService } from "../shared/services";
 import { useNavigate } from "react-router-dom";
 
-export const RequiredAuth = () => {
+export const NotRequiredAuth = () => {
     const navigator = useNavigate();
     const dispatch = useAppDispatch();
     const { user, error } = useAppSelector((state) => state.user);
@@ -12,7 +12,7 @@ export const RequiredAuth = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                await dispatch(APIService.getUser())
+                await dispatch(APIService.getUser());
                 console.log("user:", user);
                 console.log("error:", error);
                 if (user === undefined) {

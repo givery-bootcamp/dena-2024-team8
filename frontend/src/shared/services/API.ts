@@ -66,8 +66,7 @@ export const getUser = createAsyncThunk<User | ErrorResponse>('getUser', async (
       credentials: 'include',
     }
   );
-  console.log();
-  if (!response.ok) {
+  if (response.status != 200) {
     throw new Error('ユーザー情報の取得に失敗しました。');
   }
   return await response.json();

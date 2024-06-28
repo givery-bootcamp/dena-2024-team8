@@ -4,6 +4,7 @@ import { Home } from "../features/home";
 import { Post } from "../features/posts/Post";
 import { Signin } from "../features/signin";
 import { RequiredAuth } from "../components/RequiredAuth";
+import { NotRequiredAuth } from "../components/NotRequiredAuth";
 export const AppRoute = () => {
   return (
     <Routes>
@@ -14,7 +15,9 @@ export const AppRoute = () => {
           <Route path="/posts/:postId" element = {<Post />}/>
         </Route>
       </Route>
-      <Route path="/signin" element={<Signin />} />
+      <Route element={<NotRequiredAuth />}>
+        <Route path="/signin" element={<Signin />} />
+      </Route>
     </Routes>
   );
 };

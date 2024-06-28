@@ -3,9 +3,11 @@ import { configureStore } from "@reduxjs/toolkit";
 import helloReducer, { helloSlice } from "./HelloSlice";
 import postReducer, { postSlice } from "./PostsSlice";
 import postDetailReducer, { postDetailSlice } from "./PostDetailSlice";
-import searchPostReducer, { searchPostSlice } from "./searchPostsSlice";
 import signinReducer, { signinSlice } from "./SigninSlice";
 import deletePostReducer, { deletePostSlice } from "./DeletePostSlice";
+import userReducer, { userSlice } from "./UserSlice";
+import searchPostReducer, { searchPostSlice } from "./searchPostsSlice";
+import createPostReducer, { createPostSlice } from "./CreatePostSlice";
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +17,8 @@ export const store = configureStore({
     deletePost: deletePostReducer,
     searchPostList: searchPostReducer,
     singin: signinReducer,
+    user: userReducer,
+    createPost: createPostReducer,
   },
 });
 
@@ -25,6 +29,8 @@ export const actions = {
   ...deletePostSlice.actions,
   ...searchPostSlice.actions,
   ...signinSlice.actions,
+  ...userSlice.actions,
+  ...createPostSlice.actions,
 };
 
 export type RootState = ReturnType<typeof store.getState>;

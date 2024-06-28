@@ -1,27 +1,26 @@
 import { useEffect, useState } from "react";
-import { createPost } from "../../shared/services/API";
 import { APIService } from "../../shared/services";
-import { useAppSelector, useAppDispatch } from "../../shared/hooks";
+import { useAppDispatch } from "../../shared/hooks";
 
 export default function PostForm() {
-  const [contents,setContens] = useState(""); // 投稿内容
+  const [postContent,setPostContent] = useState(""); // 投稿内容
   const dispatch = useAppDispatch();
   const title = "hoge";
 
   const resetText = () =>{
-    setContens("");
+    setPostContent("");
   }
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    dispatch(APIService.createPost({title,contents}))
+    dispatch(APIService.createPost({title,content: postContent}))
       .then(()=>{dispatch(APIService.getPostList())});
     resetText();
   };
 
   useEffect(()=>{
-    console.log(contents);
-  },[contents]);
+    console.log(postContent);
+  },[postContent]);
   
   return (
     <form className="mb-3" onSubmit={handleSubmit}>
@@ -34,9 +33,9 @@ export default function PostForm() {
       <textarea
         className="form-control border rounded py-2 px-3 w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="TweetFormTextarea"
-        value = {contents}
+        value = {postContent}
         placeholder="今の気持ちは？？"
-        onChange={(e) => setContens(e.target.value)}
+        onChange={(e) => setPostContent(e.target.value)}
       ></textarea>
       <button
         type="submit"

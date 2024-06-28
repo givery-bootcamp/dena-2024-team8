@@ -8,11 +8,11 @@ import { actions } from "../../shared/store";
 export const PostDetailRouter = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { postId } = useParams();
+  const { postId = "" } = useParams();
 
   const { postDetail } = useAppSelector((state) => state.detail);
   const { isDeleted, error_message } = useAppSelector(
-    (state) => state.deletePost
+    (state) => state.deletePost,
   );
 
   const handleDelete = (id: number) => {
@@ -21,9 +21,7 @@ export const PostDetailRouter = () => {
 
   // ここでpostIdを使ってデータベースから対象のpostの詳細を取得
   useEffect(() => {
-    if (postId != undefined) {
-      dispatch(APIService.getPostDetail(postId));
-    }
+    dispatch(APIService.getPostDetail(postId));
   }, [dispatch, postId]);
 
   useEffect(() => {
@@ -31,7 +29,7 @@ export const PostDetailRouter = () => {
       dispatch(actions.resetDeletePostState());
       navigate("/");
     }
-  }, [isDeleted, navigate, navigate]);
+  }, [isDeleted, navigate, dispatch]);
 
   if (postDetail == undefined) {
     return (

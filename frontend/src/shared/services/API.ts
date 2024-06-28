@@ -34,7 +34,7 @@ export const deletePost = createAsyncThunk<boolean, number>(
       credentials: "include",
     });
     return response.ok;
-  }
+  },
 );
 
 export const signin = createAsyncThunk<

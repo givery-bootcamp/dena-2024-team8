@@ -82,7 +82,7 @@ jobs:
   # ECR(elastic container registry)にpushする
   backend-ecr-push:
     runs-on: ubuntu-latest
-    needs: [backend-build, elasticsearch-ecr-push]
+    needs: [backend-build, elasticsearch-ecr-build-and-push]
     # deployブランチにpushされた時のみ実行
     # if: github.ref == 'refs/heads/deploy'
 

@@ -11,7 +11,7 @@ export const AppRoute = () => {
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<SearchRouter />} />
-        <Route path="/posts/:postId" element = {<Post />}/>
+        <Route path="/posts/:postId" element={<Post />} />
         <Route path="/signin" element={<Signin />} />
       </Route>
     </Routes>

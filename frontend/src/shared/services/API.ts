@@ -15,7 +15,7 @@ export const getPostList = createAsyncThunk<PostList>(
   async () => {
     const response = await fetch(`${API_ENDPOINT_PATH}/posts`);
     return await response.json();
-  }
+  },
 );
 
 export const getPostDetail = createAsyncThunk<Post, string>(
@@ -23,7 +23,7 @@ export const getPostDetail = createAsyncThunk<Post, string>(
   async (postId: string) => {
     const response = await fetch(`${API_ENDPOINT_PATH}/posts/${postId}`);
     return await response.json();
-  }
+  },
 );
 
 export const signin = createAsyncThunk<
@@ -61,7 +61,7 @@ export const signout = createAsyncThunk<SignOutResponse>(
     const data = await response.json();
 
     return data;
-  }
+  },
 );
 
 export const getSearchPostList = createAsyncThunk<PostList, string>(
@@ -69,5 +69,5 @@ export const getSearchPostList = createAsyncThunk<PostList, string>(
   async (query) => {
     const response = await fetch(`${API_ENDPOINT_PATH}/search?q=${query}`);
     return await response.json();
-  }
+  },
 );

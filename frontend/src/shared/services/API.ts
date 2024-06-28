@@ -26,19 +26,14 @@ export const getPostDetail = createAsyncThunk<Post, string>(
   }
 );
 
-export const deletePost = createAsyncThunk<Post, number>(
+export const deletePost = createAsyncThunk<boolean, number>(
   "deletePost",
   async (postId: number) => {
-    let response = {}
-    try {
-      response = await fetch(`${API_ENDPOINT_PATH}/posts/${postId}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-    } catch (error) {
-      console.log(error);
-    }
-    return {} as Post
+    const response = await fetch(`${API_ENDPOINT_PATH}/posts/${postId}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    return response.ok;
   }
 );
 

@@ -142,6 +142,7 @@ frontend/
 - mock serverを立てるには[prism](https://docs.stoplight.io/docs/prism/674b27b261c3c-prism-overview)っていうライブラリを使えばできるらしい（未検証）
 
 ### バックエンド
+- `.env.example`を参考に`.env`を作成してください。
 - `backend/internal/controllers/*`の関数に対して記述します。
 - 記法は[ここ](https://github.com/swaggo/swag?tab=readme-ov-file#how-to-use-it-with-gin)とか、chatgptに聞いてください。
 - swaggoの記述を更新したら

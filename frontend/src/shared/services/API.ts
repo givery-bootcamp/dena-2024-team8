@@ -15,7 +15,7 @@ export const getPostList = createAsyncThunk<PostList>(
   async () => {
     const response = await fetch(`${API_ENDPOINT_PATH}/posts`);
     return await response.json();
-  }
+  },
 );
 
 export const getPostDetail = createAsyncThunk<Post, string>(
@@ -23,7 +23,7 @@ export const getPostDetail = createAsyncThunk<Post, string>(
   async (postId: string) => {
     const response = await fetch(`${API_ENDPOINT_PATH}/posts/${postId}`);
     return await response.json();
-  }
+  },
 );
 
 export const signin = createAsyncThunk<
@@ -61,13 +61,42 @@ export const signout = createAsyncThunk<SignOutResponse>(
     const data = await response.json();
 
     return data;
-  }
+  },
 );
+
+export const createPost = createAsyncThunk<
+  Post,
+  { title: string; content: string }
+>("createPost", async ({ title, content: content }) => {
+  const response = await fetch(`${API_ENDPOINT_PATH}/posts`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      title: title,
+      body: content,
+    }),
+    credentials: "include",
+  });
+  return await response.json();
+});
 
 export const getSearchPostList = createAsyncThunk<PostList, string>(
   "getSearchPost",
   async (query) => {
     const response = await fetch(`${API_ENDPOINT_PATH}/search?q=${query}`);
     return await response.json();
-  }
+  },
 );
+
+export const getUser = createAsyncThunk<User>("getUser", async () => {
+  const response = await fetch(`${API_ENDPOINT_PATH}/auth/user`, {
+    method: "GET",
+    credentials: "include",
+  });
+  if (response.status != 200) {
+    throw new Error("ユーザー情報の取得に失敗しました。");
+  }
+  return await response.json();
+});

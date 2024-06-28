@@ -16,3 +16,7 @@ INSERT INTO posts (user_id, title, body) VALUES (1, 'プログラミング学習
 INSERT INTO posts (user_id, title, body) VALUES (1, '健康的な朝食のすすめ', '忙しい朝でも簡単に作れる、栄養満点の朝食レシピを紹介します。\n今日のテーマは、オートミールを使ったアレンジレシピです。');
 INSERT INTO posts (user_id, title, body) VALUES (1, '読書感想：「明日への一歩」', '最近読んだ自己啓発本「明日への一歩」の感想です。\n特に印象に残ったのは、小さな習慣の積み重ねの大切さについての章でした。');
 INSERT INTO posts (user_id, title, body) VALUES (1, '初心者ランナーの挑戦：5km走破！', '今日、ついに5km走破に成功しました！\n3ヶ月前は1kmも走れなかったのに、少しずつ距離を伸ばしてきて良かったです。');
+INSERT INTO posts (user_id, title, body) VALUES (1, 'test2', '質問2\n改行');
+
+INSERT INTO comments (post_id, user_id, body) VALUES (1, 2, '回答1\n改行');
+INSERT INTO comments (post_id, user_id, body) VALUES (1, 1, '回答2\n改行');

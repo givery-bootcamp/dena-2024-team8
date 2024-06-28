@@ -6,3 +6,6 @@ INSERT INTO users (name, password) VALUES ('hanako', '$2a$12$4bTKrmghvw8FFfTyb/8
 
 INSERT INTO posts (user_id, title, body) VALUES (1, 'test1', '質問1\n改行');
 INSERT INTO posts (user_id, title, body) VALUES (1, 'test2', '質問2\n改行');
+
+INSERT INTO comments (post_id, user_id, body) VALUES (1, 2, '回答1\n改行');
+INSERT INTO comments (post_id, user_id, body) VALUES (1, 1, '回答2\n改行');

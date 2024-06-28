@@ -64,7 +64,7 @@ services:
       - discovery.type=single-node
       - xpack.security.enabled=false
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
     ulimits:
       memlock:
         soft: -1

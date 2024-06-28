@@ -6,6 +6,7 @@ import { Signin } from "../features/signin";
 import { RequiredAuth } from "../components/RequiredAuth";
 import { SearchRouter } from "../features/search/SearchRouter";
 import { CreatePost } from "../features/posts/CreatePost";
+import { UpdatePost } from "../features/posts/UpdatePost";
 
 export const AppRoute = () => {
   return (
@@ -15,6 +16,7 @@ export const AppRoute = () => {
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<SearchRouter />} />
           <Route path="/posts/:postId" element={<Post />} />
+          <Route path="/posts/:postId/edit" element={<UpdatePost />} />
           <Route path="/posts/new" element={<CreatePost />} />
         </Route>
       </Route>

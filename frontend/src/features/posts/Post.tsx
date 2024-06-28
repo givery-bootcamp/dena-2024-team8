@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../shared/hooks";
 import { APIService } from "../../shared/services";
 import { Spinner } from "../../components/Spinner";
@@ -8,7 +8,7 @@ export const Post = () => {
   const { postId } = useParams();
   const { postDetail } = useAppSelector((state) => state.detail);
   const dispatch = useAppDispatch();
-
+  const navigator = useNavigate();
   // ここでpostIdを使ってデータベースから対象のpostの詳細を取得
   useEffect(() => {
     if (postId != undefined) {
@@ -23,14 +23,26 @@ export const Post = () => {
       </div>
     );
   }
+  console.log("postDetail:", postDetail);
+  const handleRedirectEdit = () => {
+    navigator("/posts/" + postId + "/edit");
+  };
 
   return (
     <div className="max-w-xl mx-auto bg-white shadow-md overflow-hidden md:max-w-2xl my-4">
       <div className="md:flex">
         <div className="p-8">
-          <h2 className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
-            {postDetail.title}
-          </h2>
+          <div className="flex justify-between items-center">
+            <h2 className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
+              {postDetail.title}
+            </h2>
+            <button
+              onClick={handleRedirectEdit}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              編集をする
+            </button>
+          </div>
           <p className="mt-2 text-gray-500">{postDetail.body}</p>
           <div className="mt-4">
             <span className="text-gray-600 text-sm">

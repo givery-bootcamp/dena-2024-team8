@@ -7,6 +7,7 @@ import signinReducer, { signinSlice } from "./SigninSlice";
 import userReducer, { userSlice } from "./UserSlice";
 import searchPostReducer, { searchPostSlice } from "./searchPostsSlice";
 import createPostReducer, { createPostSlice } from "./CreatePostSlice";
+import updatePostReducer, { updatePostSlice } from "./UpdatePostSlice";
 
 export const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
     singin: signinReducer,
     user: userReducer,
     createPost: createPostReducer,
+    updatePost: updatePostReducer,
   },
 });
 
@@ -28,6 +30,7 @@ export const actions = {
   ...signinSlice.actions,
   ...userSlice.actions,
   ...createPostSlice.actions,
+  ...updatePostSlice.actions,
 };
 
 export type RootState = ReturnType<typeof store.getState>;

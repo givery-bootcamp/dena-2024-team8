@@ -37,6 +37,7 @@ func syncDataToElasticSearch() {
 	for _, post := range posts {
 		// JSONエスケープするためにencoding/jsonパッケージを使用
 		postJson, err := json.Marshal(map[string]string{
+			"id":    fmt.Sprintf("%d", post.Id),
 			"title": post.Title,
 			"body":  post.Body,
 		})

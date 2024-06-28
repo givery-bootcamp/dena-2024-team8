@@ -1,17 +1,12 @@
 package controllers
 
 import (
-	"context"
-	"encoding/json"
 	"errors"
-	"fmt"
 	"myapp/internal/entities"
-	"myapp/internal/external"
 	"myapp/internal/repositories"
 	"myapp/internal/usecases"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -41,6 +36,7 @@ type Post struct {
 // @Failure 500 {object} ErrorResponse "Internal Server Error"
 // @Router /posts [get]
 func PostList(ctx *gin.Context) {
+	query := ctx.Query("q")
 	slimit := ctx.DefaultQuery("limit", "10")
 	soffset := ctx.DefaultQuery("offset", "0")
 	limit, err := strconv.Atoi(slimit)
@@ -57,90 +53,29 @@ func PostList(ctx *gin.Context) {
 	result, err := usecase.GetList(limit, offset)
 	if err != nil {
 		handleError(ctx, 500, err)
-	} else {
-		if len(result) == 0 {
-			result = []*entities.Post{}
-		}
+	}
+	if len(result) == 0 {
+		result = []*entities.Post{}
 		ctx.JSON(200, result)
 	}
-}
-
-func PostSearch(c *gin.Context) {
-	query := c.Query("q")
-
-	var searchQuery string
 	if query == "" {
-		// Query is empty, search for all documents
-		searchQuery = `{
-			"query": {
-				"match_all": {}
-			}
-		}`
+		ctx.JSON(200, result)
 	} else {
-		searchQuery = fmt.Sprintf(`{
-			"query": {
-				"multi_match": {
-					"query": "%s",
-					"fields": ["title", "body"]
+		postIds, err := usecase.Search(query)
+		if err != nil {
+			handleError(ctx, 500, err)
+		} else {
+			filtered := []*entities.Post{}
+			for _, post := range result {
+				for _, id := range postIds {
+					if post.Id == id {
+						filtered = append(filtered, post)
+					}
 				}
 			}
-		}`, query)
-	}
-
-	var buf strings.Builder
-	buf.WriteString(searchQuery)
-
-	res, err := external.ES.Search(
-		external.ES.Search.WithContext(context.Background()),
-		external.ES.Search.WithIndex("posts"),
-		external.ES.Search.WithBody(strings.NewReader(buf.String())),
-		external.ES.Search.WithTrackTotalHits(true),
-		external.ES.Search.WithPretty(),
-	)
-	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
-		return
-	}
-	defer res.Body.Close()
-
-	if res.IsError() {
-		var e map[string]interface{}
-		if err := json.NewDecoder(res.Body).Decode(&e); err != nil {
-			c.JSON(500, gin.H{"error": fmt.Sprintf("Error parsing the response body: %s", err)})
-			return
-		} else {
-			c.JSON(500, gin.H{"error": fmt.Sprintf("Error: %s: %s", res.Status(), e["error"].(map[string]interface{})["reason"])})
-			return
+			ctx.JSON(200, filtered)
 		}
 	}
-
-	var r map[string]interface{}
-	if err := json.NewDecoder(res.Body).Decode(&r); err != nil {
-		c.JSON(500, gin.H{"error": fmt.Sprintf("Error parsing the response body: %s", err)})
-		return
-	}
-
-	posts := make([]Post, 0)
-
-	hits, ok := r["hits"].(map[string]interface{})
-	if !ok || hits["hits"] == nil {
-		// No hits found, handle empty result case
-		c.JSON(200, posts)
-		return
-	}
-
-	for _, hit := range hits["hits"].([]interface{}) {
-		source := hit.(map[string]interface{})["_source"].(map[string]interface{})
-		id, _ := source["id"].(float64) // Type assertion with fallback
-		post := Post{
-			Id:    int(id),
-			Title: source["title"].(string),
-			Body:  source["body"].(string),
-		}
-		posts = append(posts, post)
-	}
-
-	c.JSON(200, posts)
 }
 
 // PostDetail godoc

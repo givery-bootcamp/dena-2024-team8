@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import { Hello } from "../models";
+import { CommentList, Hello } from "../models";
 import { PostList, Post, User, SignOutResponse } from "../models";
 
 const API_ENDPOINT_PATH = import.meta.env.VITE_API_ENDPOINT_PATH ?? "";
@@ -111,3 +111,13 @@ export const getUser = createAsyncThunk<User>("getUser", async () => {
   }
   return await response.json();
 });
+
+export const getCommentList = createAsyncThunk<CommentList, number>(
+  "getCommentList",
+  async (postId) => {
+    const response = await fetch(
+      `${API_ENDPOINT_PATH}/posts/${postId}/comments`,
+    );
+    return await response.json();
+  },
+);

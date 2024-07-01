@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../shared/hooks";
 import { APIService } from "../../shared/services";
 import { Spinner } from "../../components/Spinner";
 import { actions } from "../../shared/store";
+import { CommentCard } from "../../components/card/CommentCard";
 
 export const PostDetailRouter = () => {
   const dispatch = useAppDispatch();
@@ -14,6 +15,10 @@ export const PostDetailRouter = () => {
   const { isDeleted, error_message } = useAppSelector(
     (state) => state.deletePost,
   );
+  const { commentList } = useAppSelector((state) => state.commentList);
+  useEffect(() => {
+    dispatch(APIService.getCommentList(Number(postId)));
+  }, [dispatch, postId]);
 
   const handleDelete = (id: number) => {
     dispatch(APIService.deletePost(id));
@@ -78,6 +83,9 @@ export const PostDetailRouter = () => {
           Delete
         </button>
       </div>
+      {commentList?.map((comment) => (
+        <CommentCard key={comment.id} comment={comment} />
+      ))}
     </div>
   );
 };

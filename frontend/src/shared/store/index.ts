@@ -8,6 +8,7 @@ import deletePostReducer, { deletePostSlice } from "./DeletePostSlice";
 import userReducer, { userSlice } from "./UserSlice";
 import searchPostReducer, { searchPostSlice } from "./searchPostsSlice";
 import createPostReducer, { createPostSlice } from "./CreatePostSlice";
+import updatePostReducer, { updatePostSlice } from "./UpdatePostSlice";
 import getCommentReducer, { getCommentSlice } from "./CommentSlice";
 
 export const store = configureStore({
@@ -20,6 +21,7 @@ export const store = configureStore({
     singin: signinReducer,
     user: userReducer,
     createPost: createPostReducer,
+    updatePost: updatePostReducer,
     commentList: getCommentReducer,
   },
 });
@@ -33,6 +35,7 @@ export const actions = {
   ...signinSlice.actions,
   ...userSlice.actions,
   ...createPostSlice.actions,
+  ...updatePostSlice.actions,
   ...getCommentSlice.actions,
 };
 

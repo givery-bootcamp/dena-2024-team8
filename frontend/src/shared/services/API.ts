@@ -112,6 +112,21 @@ export const getUser = createAsyncThunk<User>("getUser", async () => {
   return await response.json();
 });
 
+export const updatePost = createAsyncThunk<
+  Post,
+  { postId: string; title: string; body: string }
+>("updatePost", async ({ postId, title, body }) => {
+  const response = await fetch(`${API_ENDPOINT_PATH}/posts/${postId}`, {
+    method: "PUT",
+    body: new URLSearchParams({
+      title: title,
+      body: body,
+    }),
+    credentials: "include",
+  });
+  return await response.json();
+});
+
 export const getCommentList = createAsyncThunk<CommentList, number>(
   "getCommentList",
   async (postId) => {

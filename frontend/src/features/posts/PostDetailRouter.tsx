@@ -48,38 +48,34 @@ export const PostDetailRouter = () => {
     <div className="max-w-xl mx-auto md:max-w-2xl">
       {error_message && <p className="text-red-500">{error_message}</p>}
       <div className="bg-white shadow-md overflow-hidden my-4">
-        <div className="md:flex">
-          <div className="p-8">
-            <div className="flex justify-between items-center">
-              <h2 className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
-                {postDetail.title}
-              </h2>
-              <button
-                onClick={handleRedirectEdit}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              >
-                編集をする
-              </button>
-            </div>
-            <p className="mt-2 text-gray-500">{postDetail.body}</p>
-            <div className="mt-4">
-              <span className="text-gray-600 text-sm">
-                Posted by User {postDetail.user_id}
-              </span>
-            </div>
-            <div className="mt-4 text-gray-500 text-xs">
-              <p>
-                Created At: {new Date(postDetail.created_at).toLocaleString()}
+        <div className="p-8">
+          <div className="flex justify-between items-center">
+            <h2 className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
+              {postDetail.title}
+            </h2>
+            <button
+              onClick={handleRedirectEdit}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              編集をする
+            </button>
+          </div>
+          <p className="mt-2 text-gray-500">{postDetail.body}</p>
+          <div className="mt-4">
+            <span className="text-gray-600 text-sm">
+              Posted by User {postDetail.user_id}
+            </span>
+          </div>
+          <div className="mt-4 text-gray-500 text-xs">
+            <p>
+              Created At: {new Date(postDetail.created_at).toLocaleString()}
+            </p>
+            <p>Updated At: {new Date(postDetail.update_at).toLocaleString()}</p>
+            {postDetail.deleted_at ? (
+              <p className="text-red-500">
+                Deleted At: {new Date(postDetail.deleted_at).toLocaleString()}
               </p>
-              <p>
-                Updated At: {new Date(postDetail.update_at).toLocaleString()}
-              </p>
-              {postDetail.deleted_at ? (
-                <p className="text-red-500">
-                  Deleted At: {new Date(postDetail.deleted_at).toLocaleString()}
-                </p>
-              ) : null}
-            </div>
+            ) : null}
           </div>
         </div>
       </div>

@@ -85,7 +85,7 @@ export const createPost = createAsyncThunk<
 export const getSearchPostList = createAsyncThunk<PostList, string>(
   "getSearchPost",
   async (query) => {
-    const response = await fetch(`${API_ENDPOINT_PATH}/search?q=${query}`);
+    const response = await fetch(`${API_ENDPOINT_PATH}/posts?q=${query}`);
     return await response.json();
   },
 );

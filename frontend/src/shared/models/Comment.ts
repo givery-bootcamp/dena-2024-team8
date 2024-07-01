@@ -1,5 +1,3 @@
-import { User } from "./User";
-
 export type CommentList = Comment[];
 
 export type Comment = {

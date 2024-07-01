@@ -28,6 +28,21 @@ func NewCommentRepository(conn *gorm.DB) *CommentRepository {
 	}
 }
 
+func (r *CommentRepository) List(postId int, limit int, offset int) ([]*entities.Comment, error) {
+	var comments []*Comment
+	var result = r.Conn.Where("post_id = ?", postId).Limit(limit).Offset(offset).Find(&comments)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	var entities []*entities.Comment
+	for _, v := range comments {
+		entities = append(entities, convertCommentRepositoryModelToEntity(v))
+	}
+
+	return entities, nil
+}
+
 func (r *CommentRepository) Create(postId int, body string, userId int) (*entities.Comment, error) {
 	comment := Comment{
 		PostId:    postId,

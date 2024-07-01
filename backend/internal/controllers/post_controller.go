@@ -66,8 +66,8 @@ func PostList(ctx *gin.Context) {
 			handleError(ctx, 500, err)
 		} else {
 			filtered := []*entities.Post{}
-			for _, post := range result {
-				for _, id := range postIds {
+			for _, id := range postIds {
+				for _, post := range result {
 					if post.Id == id {
 						filtered = append(filtered, post)
 					}

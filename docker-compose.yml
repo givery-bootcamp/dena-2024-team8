@@ -10,7 +10,7 @@ services:
       - ./backend:/go/src/myapp
     command: "air"
     depends_on:
-      db: 
+      db:
         condition: service_healthy
       elasticsearch:
         condition: service_healthy
@@ -49,7 +49,16 @@ services:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=training
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root"]
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "127.0.0.1",
+          "-u",
+          "root"
+        ]
       interval: 1s
       timeout: 1s
       retries: 6
@@ -81,6 +90,12 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+    command: > # 日本語検索用の Analyzer を設定する
+      bash -c '
+        bin/elasticsearch-plugin install analysis-icu
+        bin/elasticsearch-plugin install analysis-kuromoji
+        echo "y" | bin/elasticsearch-systemd-pre-exec
+        exec docker-entrypoint.sh elasticsearch'
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.14.1

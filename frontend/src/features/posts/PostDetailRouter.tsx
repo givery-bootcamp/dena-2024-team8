@@ -39,7 +39,6 @@ export const PostDetailRouter = () => {
       </div>
     );
   }
-  console.log("postDetail:", postDetail);
   const handleRedirectEdit = () => {
     navigator("/posts/" + postId + "/edit");
   };

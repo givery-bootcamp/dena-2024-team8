@@ -14,10 +14,8 @@ export const UpdatePost = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    console.log("submit");
     dispatch(APIService.updatePost({ postId, title, body }))
-      .then((response) => {
-        console.log(response);
+      .then(() => {
         navigator("/posts/" + postId);
       })
       .catch((error) => {

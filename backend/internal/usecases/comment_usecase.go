@@ -15,6 +15,10 @@ func NewCommentUsecase(r interfaces.CommentRepository) *CommentUsecase {
 	}
 }
 
+func (u *CommentUsecase) List(postId int, limit int, offset int) ([]*entities.Comment, error) {
+	return u.repository.List(postId, limit, offset)
+}
+
 func (u *CommentUsecase) Create(postId int, body string, userId int) (*entities.Comment, error) {
 	return u.repository.Create(postId, body, userId)
 }

@@ -9,6 +9,7 @@ import userReducer, { userSlice } from "./UserSlice";
 import searchPostReducer, { searchPostSlice } from "./searchPostsSlice";
 import createPostReducer, { createPostSlice } from "./CreatePostSlice";
 import updatePostReducer, { updatePostSlice } from "./UpdatePostSlice";
+import getCommentReducer, { getCommentSlice } from "./CommentSlice";
 
 export const store = configureStore({
   reducer: {
@@ -21,6 +22,7 @@ export const store = configureStore({
     user: userReducer,
     createPost: createPostReducer,
     updatePost: updatePostReducer,
+    commentList: getCommentReducer,
   },
 });
 
@@ -34,6 +36,7 @@ export const actions = {
   ...userSlice.actions,
   ...createPostSlice.actions,
   ...updatePostSlice.actions,
+  ...getCommentSlice.actions,
 };
 
 export type RootState = ReturnType<typeof store.getState>;

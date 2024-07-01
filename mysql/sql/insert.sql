@@ -19,3 +19,7 @@ INSERT INTO posts (user_id, title, body) VALUES (1, '初心者ランナーの挑
 
 INSERT INTO comments (post_id, user_id, body) VALUES (1, 2, '回答1\n改行');
 INSERT INTO comments (post_id, user_id, body) VALUES (1, 1, '回答2\n改行');
+INSERT INTO comments (post_id, user_id, body) VALUES (2, 2, '回答3\n改行');
+INSERT INTO comments (post_id, user_id, body) VALUES (2, 1, '回答4\n改行');
+INSERT INTO comments (post_id, user_id, body) VALUES (2, 2, '回答5\n改行');
+INSERT INTO comments (post_id, user_id, body) VALUES (2, 1, '回答6\n改行');

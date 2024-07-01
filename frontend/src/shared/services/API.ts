@@ -115,7 +115,9 @@ export const getUser = createAsyncThunk<User>("getUser", async () => {
 export const getCommentList = createAsyncThunk<CommentList, number>(
   "getCommentList",
   async (postId) => {
-    const response = await fetch(`${API_ENDPOINT_PATH}/posts/${postId}/comments`);
+    const response = await fetch(
+      `${API_ENDPOINT_PATH}/posts/${postId}/comments`,
+    );
     return await response.json();
   },
 );

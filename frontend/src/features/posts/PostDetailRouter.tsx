@@ -83,7 +83,9 @@ export const PostDetailRouter = () => {
           Delete
         </button>
       </div>
-      {commentList?.map((comment) => <CommentCard key={comment.id} comment={comment} />)}
+      {commentList?.map((comment) => (
+        <CommentCard key={comment.id} comment={comment} />
+      ))}
     </div>
   );
 };

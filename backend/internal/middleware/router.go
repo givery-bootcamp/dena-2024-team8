@@ -22,6 +22,7 @@ func SetupRoutes(app *gin.Engine) {
 	app.GET("/hello", controllers.HelloWorld)
 	app.GET("/posts", controllers.PostList)
 	app.GET("/posts/:postId", controllers.PostDetail)
+	app.GET("/posts/:postId/comments", controllers.CommentList)
 	app.POST("/signin", controllers.SignIn)
 	app.POST("/signout", controllers.SignOut)
 	// Swaggerのエンドポイントを設定
@@ -31,6 +32,11 @@ func SetupRoutes(app *gin.Engine) {
 
 	authroot := app.Group("/", Auth())
 	authroot.POST("/posts", controllers.PostCreate)
+
+	// コメントのエンドポイント
+	authroot.POST("/comments", controllers.CommentCreate)
+	authroot.PUT("/comments/:commentId", controllers.CommentUpdate)
+	authroot.DELETE("/comments/:commentId", controllers.CommentDelete)
 	authroot.PUT("/posts/:postId", controllers.PostUpdate)
 	authroot.DELETE("/posts/:postId", controllers.PostDelete)
 }
